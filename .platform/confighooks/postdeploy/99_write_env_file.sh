@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 ## This is a post deployment script which is intended to run on 
-## Elastic Beanstalk: Amazon Linux 2.  It copies the Elastic Beanstalk
+## Elastic Beanstalk: Amazon Linux 2023.  It copies the Elastic Beanstalk
 ## Environment Variables into a local .env file in the production
 ## app deployment directory, and allows command-line based commands
 ## like php artisan to function correctly.
