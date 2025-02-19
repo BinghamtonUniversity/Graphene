@@ -3,7 +3,7 @@
 use Illuminate\Http\Request;
 
 /* Note: All Routes in this file are automatically prepended with /api */
-Route::group(['middleware' => ['public.api.auth', 'no.save.session'], 'prefix' => 'public'], function () {
+Route::group(['middleware' => ['public.api.auth'], 'prefix' => 'public'], function () {
 
     /* Manage Groups */
     Route::get('/groups','GroupController@list_all_groups');
@@ -15,13 +15,9 @@ Route::group(['middleware' => ['public.api.auth', 'no.save.session'], 'prefix' =
     Route::delete('/groups/members/{slug?}', 'GroupController@remove_members_by_slug');
     // Route::get('/groups/{group}/members','GroupController@list_members');
 
-
-
-
     Route::put('/groups/{slug}','GroupController@update_group_by_slug');
     Route::get('/groups/{group}/members','GroupController@list_members')->whereNumber('group');
     Route::get('/groups/{slug}/members', 'GroupController@members_by_slug');
-
 
     Route::match(['get','post'],'/apps/search/{type?}','AppController@search');
 

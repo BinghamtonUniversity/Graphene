@@ -5,7 +5,7 @@ use App\App;
 Route::get('/workflow/{group}/{slug}', 'WorkflowInstanceController@run');
 Route::get('/wr/{renderer}/{group}/{slug}', 'WorkflowInstanceController@render');
 
-Route::get('/workflow/{group}','PageController@redirect')->middleware('no.save.session');
+Route::get('/workflow/{group}','PageController@redirect');
 
 
 // Get Workflow Instance External Resource Data by endpoint_id (POST or GET)
@@ -35,7 +35,7 @@ Route::group(['middleware' => ['custom.auth'],'prefix' => 'admin'], function () 
     Route::get('/workflowinstances/{workflow_instance}', 'WorkflowInstanceController@admin')->middleware('can:get,workflow_instance');
 });
   
-Route::group(['middleware' => ['no.save.session'],'prefix' => 'api'], function () {
+Route::group(['prefix' => 'api'], function () {
     /***** WORKFLOWS *****/
     // Workflow Submission (Files)
     Route::post('/workflowsubmissions/{workflow_submission}/files','WorkflowSubmissionFileController@create')->middleware('can:take_action,workflow_submission');

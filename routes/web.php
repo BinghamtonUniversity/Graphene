@@ -16,14 +16,13 @@ Auth::routes();
 
 Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
-
 /***** User Content *****/
 Route::get('/','UserDashboardController@index');
-Route::get('/css','UserDashboardController@css')->middleware('no.save.session');
-Route::get('/health','UserDashboardController@health_check')->middleware('no.save.session');
+Route::get('/css','UserDashboardController@css');
+Route::get('/health','UserDashboardController@health_check');
 Route::get('/app/{group}/{slug}', 'AppInstanceController@run');
-Route::get('/app/{group}','PageController@redirect')->middleware('no.save.session');
-Route::get('/link/{link}/{extra?}','LinkController@redirect')->where('extra','(.*)')->middleware('no.save.session');
+Route::get('/app/{group}','PageController@redirect');
+Route::get('/link/{link}/{extra?}','LinkController@redirect')->where('extra','(.*)');
 
 Route::get('/setup',function(){
   return redirect('/');
@@ -31,11 +30,11 @@ Route::get('/setup',function(){
 
 Route::get('/ar/{renderer}/{group}/{slug}', 'AppInstanceController@render');
 Route::get('/page/{group}/{slug}', 'PageController@run');
-Route::get('/page/{group}','PageController@redirect')->middleware('no.save.session');
+Route::get('/page/{group}','PageController@redirect');
 Route::get('/community/{group}/{slug?}', 'PageController@run'); /* Compatibility with old portal */
 Route::get('/r/{template}/{group}/{slug?}', 'PageController@render');
 Route::get('/login', 'Auth\LoginController@showLoginForm')->name('login');
-Route::get('/image/{image}','ImageController@get')->middleware('no.save.session');
+Route::get('/image/{image}','ImageController@get');
 
 Route::group(['middleware' => ['custom.auth']], function () {
   Route::get('/heartbeat','UserDashboardController@heartbeat');
@@ -66,7 +65,7 @@ Route::group(['middleware' => ['custom.auth'],'prefix' => 'admin'], function () 
   Route::get('/sites/{site}/templates', 'SiteController@templates')->middleware('can:get,site');
 });
 
-Route::group(['middleware' => ['no.save.session'],'prefix' => 'api'], function () {
+Route::group(['prefix' => 'api'], function () {
     Route::post('/usersetup', 'UserController@init');
 
     /***** Dashboard  *****/
@@ -294,20 +293,11 @@ Route::group(['middleware' => ['no.save.session'],'prefix' => 'api'], function (
     // Log a visit
     Route::post('/visit/log_visit','VisitController@log_visit');
 
-    Route::get('/ellucianmobile/config','EllucianMobileController@config');
-
     Route::get('/proxy/{slug}/{route}/{object_id?}/{action?}/{selection?}','APIServerController@fetch')->middleware('can:create,App\App');;  
     Route::post('/proxy/{slug}/{route}/{object_id?}/{action?/{selection?}','APIServerController@fetch')->middleware('can:create,App\App');; 
     Route::put('/proxy/{slug}/{route}/{object_id?}/{action?}/{selection?}','APIServerController@fetch')->middleware('can:create,App\App');; 
     Route::delete('/proxy/{slug}/{route}/{object_id?}/{action?}/{selection?}','APIServerController@fetch')->middleware('can:create,App\App');; 
   });
-
-Route::get('/ellucianmobile/login','EllucianMobileController@login');
-Route::get('/ellucianmobile/checkauth','EllucianMobileController@check_auth');
-Route::get('/ellucianmobile/redirect/{base_64_redirect}','EllucianMobileController@redirect');
-Route::get('/ellucianmobile/userinfo','EllucianMobileController@userinfo');
-Route::get('/ellucianmobile/config','EllucianMobileController@config');
-Route::get('/ellucianmobile/version','EllucianMobileController@version');
 
 Route::group(['middleware' => ['custom.auth'],'prefix' => 'admin/apiserver'], function () {
   Route::get('/{slug}/apis/{api_id}', 'APIServerController@api')->middleware('can:create,App\App');

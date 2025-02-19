@@ -111,7 +111,7 @@ class CASAuth
         if (!$user_exists) {
             config('app.site')->add_member($user,false,false);
         }
-        Auth::login($user, true);
+        Auth::login($user);
     }
 
     private function handle_generic() {
@@ -134,7 +134,7 @@ class CASAuth
         if (!$user_exists) {
             config('app.site')->add_member($user,false,false);
         }
-        Auth::login($user, true);
+        Auth::login($user);
     }
 
     /**

@@ -27,16 +27,8 @@ class AppServiceProvider extends ServiceProvider
      */
      public function boot(ConnectionInterface $connection)
      {
-        Session::extend('nosave_database', function($app) use ($connection) {
-            $table   = Config::get('session.table');
-            $minutes = Config::get('session.lifetime');
-            return new NoSaveDatabaseSessionHandler($connection, $table, $minutes);
-        });    
         
-        // Cache::extend('mysql', function ($app) {
-        //     return Cache::repository(new MySQLStore(DB::connection(),'cache',''));
-        // });
-    }
+     }
 
     /**
      * Register any application services.

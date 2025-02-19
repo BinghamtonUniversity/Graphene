@@ -59,7 +59,6 @@ class Kernel extends HttpKernel
         'role' => \App\Http\Middleware\CheckRole::class,
         'public.api.auth' =>  \App\Http\Middleware\PublicAPIAuth::class,
         'custom.auth'=>  \App\Http\Middleware\CustomAuthentication::class,
-        'no.save.session'=>  \App\Http\Middleware\NoSaveSession::class,
         'validate.user'=>  \App\Http\Middleware\ValidateUser::class,
     ];
 }
