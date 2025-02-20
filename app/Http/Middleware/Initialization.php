@@ -29,7 +29,7 @@ class Initialization
         }
         $current_site = null;
         try{
-            $current_site = Site::select('id','domain','name','auth','auth_config','proxyserver_config')->where('domain','=',$request->server('SERVER_NAME'))->first();
+            $current_site = Site::select('id','domain','name','auth','auth_config','proxyserver_config')->where('domain','=',$request->server('HTTP_HOST'))->first();
         }
         catch(\Illuminate\Database\QueryException $e) {
             // Only run Setup if APP_DEBUG is true, otherwise fail through for normal Debugging
@@ -109,7 +109,7 @@ class Initialization
             }
             /* site does not exist in db - how to handle this? */
             $alt_site = Site::select('domain')->first();
-            return response("Site at Domain: ".$request->server('SERVER_NAME')." cannot be resolved.  <br>Do you mean ".$alt_site->domain."?", 404)
+            return response("Site at Domain: ".$request->server('HTTP_HOST')." cannot be resolved.  <br>Do you mean ".$alt_site->domain."?", 404)
                 ->header('Content-Type', 'text/html');
         }
 
