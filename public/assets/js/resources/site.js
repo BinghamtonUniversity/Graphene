@@ -38,6 +38,7 @@ $.ajax({
 		new gform({
 			"default": {"horizontal": true},"horizontal": true,
 			fields: [
+				{label: 'CAS Client Service', name:'cas_client_service', required: true, placeholder:'http://localhost'},
 				{label: 'CAS Hostname', name:'cas_hostname', placeholder:'cas.example.com', required: true, },		
 				{label: 'CAS Real Hosts', name:'cas_real_hosts', placeholder:'cas.example.com', required: true},
 				{label: 'CAS URI', name:'cas_uri', required: true, placeholder:'/cas'},

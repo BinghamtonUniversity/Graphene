@@ -23,11 +23,6 @@ class CASAuth
         foreach(config('app.site')->auth_config as $key => $value) {
             $cas_config['cas.'.$key] = $value;
         }
-        $request_scheme = 'http';
-        if ( !is_null(request()->server('REQUEST_SCHEME')) && request()->server('REQUEST_SCHEME') != '') {
-            $request_scheme = request()->server('REQUEST_SCHEME');
-        }
-        $cas_config['cas.cas_client_service'] = $request_scheme.'://'.request()->server('HTTP_HOST');
         config($cas_config);
         $this->cas = app('cas');
     }
