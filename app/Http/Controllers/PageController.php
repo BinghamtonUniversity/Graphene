@@ -209,7 +209,7 @@ class PageController extends Controller
     }
 
 
-    public function redirect($group, Request $request) {
+    public function redirect(Request $request, $group) {
         if(!Auth::user()){           
             $return = $this->customAuth->authenticate($request);
             if(isset($return)){

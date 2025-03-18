@@ -36,7 +36,7 @@ class WorkflowSubmissionActionController extends Controller {
         // 01/19/2020, AKT - Authentication checks were moved to the public methods
         // Reason: Internal function call from Kernel cannot have an authenticated user
     }
-    public function create(WorkflowInstance $workflow_instance, Request $request,$save_or_submit='submit') {
+    public function create(Request $request, WorkflowInstance $workflow_instance,$save_or_submit='submit') {
         if($request->has('_state') && is_string($request->get('_state'))){
             $request['_state'] = json_decode($request['_state'],false);
         }
@@ -80,7 +80,7 @@ class WorkflowSubmissionActionController extends Controller {
 
         $m = new \Mustache_Engine;
 
-        $data = $this->createDataObject($workflow_submission, $request);
+        $data = $this->createDataObject($request, $workflow_submission);
 
         $myWorkflowInstance->reduceFields(function($field, &$data){
             switch($field->type){
@@ -128,11 +128,11 @@ class WorkflowSubmissionActionController extends Controller {
         if ($save_or_submit === 'save') {
             return $workflow_submission;
         } else if ($save_or_submit === 'submit'){
-            return $this->action($workflow_submission, $request);
+            return $this->action($request, $workflow_submission);
         }
     }
 
-    public function api_create(WorkflowInstance $workflow_instance, Request $request, $unique_id, $start_state, $action) {
+    public function api_create(Request $request, WorkflowInstance $workflow_instance, $unique_id, $start_state, $action) {
 
         if ($request->has('enforce_permissions') && $request->enforce_permissions === 'false') {
             // Don't check permissions!
@@ -148,7 +148,7 @@ class WorkflowSubmissionActionController extends Controller {
             'comment' => $request->has('comment')?$request->comment:null,
             'signature' => $request->has('signature')?$request->signature:null,
         ]);
-        return $this->create($workflow_instance,$new_request,'submit');
+        return $this->create($new_request,$workflow_instance,'submit');
     }
 
 
@@ -195,7 +195,7 @@ class WorkflowSubmissionActionController extends Controller {
         }
     }
 
-    public function createDataObject(WorkflowSubmission $workflow_submission, Request $request){
+    public function createDataObject(Request $request, WorkflowSubmission $workflow_submission){
         if ($this->detect_infinite_loop()) {
             return response('Infinite Loop Detected! Quitting!', 508);
         }
@@ -284,7 +284,7 @@ class WorkflowSubmissionActionController extends Controller {
     }
     
     // 01/14/2021, AKT -  Added a new parameter with a default value for automated workflow actions
-    public function action(WorkflowSubmission $workflow_submission, Request $request, $is_internal=false, $task_results = array()){
+    public function action(Request $request, WorkflowSubmission $workflow_submission, $is_internal=false, $task_results = array()){
         //01/20/2021, AKT - Added the code below to check if the actions is taken internally
         //If not, then check for authentication
         // This will be called multiple times when calling in logic blocks
@@ -455,21 +455,21 @@ class WorkflowSubmissionActionController extends Controller {
         $state_data['task_results'] = $task_results;
         // Execute Any Relevant Previous State Exit Tasks
         if(isset($previous_state->onLeave)){
-            $state_data['task_results'] += $this->executeTasks($previous_state->onLeave, $state_data, $workflow_submission, $myWorkflowInstance, $request);
+            $state_data['task_results'] += $this->executeTasks($request, $previous_state->onLeave, $state_data, $workflow_submission, $myWorkflowInstance);
         }
 
         $workflow_submission->update();
 
         // Execute Any Relevant Action Tasks
         if(isset($action->tasks)){
-            $state_data['task_results']+=  $this->executeTasks($action->tasks, $state_data, $workflow_submission, $myWorkflowInstance, $request);
+            $state_data['task_results']+=  $this->executeTasks($request, $action->tasks, $state_data, $workflow_submission, $myWorkflowInstance);
         }
 
         $workflow_submission->update();
 
         // Execute Any Relevant New State Entry Tasks
         if(isset($state->onEnter)){
-            $state_data['task_results'] += $this->executeTasks($state->onEnter, $state_data, $workflow_submission, $myWorkflowInstance, $request);
+            $state_data['task_results'] += $this->executeTasks($request, $state->onEnter, $state_data, $workflow_submission, $myWorkflowInstance);
         }
 
         // Update Submission Object In DB
@@ -499,23 +499,23 @@ class WorkflowSubmissionActionController extends Controller {
             $logic_result = $jsexec->run($method_code,$state_data);
             if(env('APP_DEBUG') && isset($logic_result['console']['debug'])){
                 $request->merge(['action'=>'error','comment'=>json_encode($logic_result['console']['debug'])]);
-                return $this->action($workflow_submission, $request,$is_internal,$state_data['task_results']);
+                return $this->action($request, $workflow_submission,$is_internal,$state_data['task_results']);
             }
             // 01/14/2021, AKT - Added $is_internal parameter to the action() function calls below to send the current value of $is_internal
             if ($logic_result['success']===false) {
                 $request->merge(['action'=>'error','comment'=>json_encode($logic_result['error'])]);
-                return $this->action($workflow_submission, $request,$is_internal,$state_data['task_results']); // action = error
+                return $this->action($request, $workflow_submission,$is_internal, $state_data['task_results']); // action = error
             }else if (isset($logic_result['console']['error'])) {
                 $request->merge(['action'=>'error','comment'=>implode("\n",$logic_result['console']['error']) ]);
-                return $this->action($workflow_submission, $request,$is_internal,$state_data['task_results']); // action = error
+                return $this->action($request, $workflow_submission, $is_internal, $state_data['task_results']); // action = error
             } else if ($logic_result['success']===true && $logic_result['return'] == true) { // is truthy
                 $comment = isset($logic_result['console']['comment'])?implode("\n",$logic_result['console']['comment']):json_encode($logic_result['console']);
                 $request->merge(['action'=>'true','comment'=>$comment]);
-                return $this->action($workflow_submission, $request,$is_internal,$state_data['task_results']); //action = true
+                return $this->action($request, $workflow_submission, $is_internal, $state_data['task_results']); //action = true
             } else if ($logic_result['success']===true && $logic_result['return'] == false) { // is falsy
                 $comment = isset($logic_result['console']['comment'])?implode("\n",$logic_result['console']['comment']):json_encode($logic_result['console']);
                 $request->merge(['action'=>'false','comment'=>$comment]);
-                return $this->action($workflow_submission, $request,$is_internal,$state_data['task_results']); // action = false
+                return $this->action($request, $workflow_submission, $is_internal, $state_data['task_results']); // action = false
             }
         } else if(!isset($workflow_submission->workflow_instance_configuration->suppress_emails) || 
                 !$workflow_submission->workflow_instance_configuration->suppress_emails){
@@ -535,7 +535,7 @@ class WorkflowSubmissionActionController extends Controller {
         return WorkflowSubmission::with('workflowVersion')->with('workflow')->where('id', '=', $workflow_submission->id)->first();
     }
 
-    public function api_action(WorkflowSubmission $workflow_submission, Request $request, $unique_id, $action) {
+    public function api_action(Request $request, WorkflowSubmission $workflow_submission, $unique_id, $action) {
         $this->authorize('take_action',$workflow_submission);
 
         $new_request = new Request();
@@ -546,7 +546,7 @@ class WorkflowSubmissionActionController extends Controller {
             'comment' => $request->has('comment')?$request->comment:null,
             'signature' => $request->has('signature')?$request->signature:null,
         ]);
-        return $this->action($workflow_submission,$new_request);
+        return $this->action($new_request, $workflow_submission);
     }
 
     private function determineAssignment() {
@@ -595,7 +595,7 @@ class WorkflowSubmissionActionController extends Controller {
         $activity->save();
     }
 
-    private function executeTasks($tasks, $data, &$workflow_submission, &$workflow_instance, Request $request){
+    private function executeTasks(Request $request, $tasks, $data, &$workflow_submission, &$workflow_instance){
         //02/11/2021, AT - Added support for array of different type of fields, such as users, groups and emails for the task emails
         $m = new \Mustache_Engine([
             'escape' => function($value) {
@@ -907,7 +907,7 @@ submitted by {{owner.first_name}} {{owner.last_name}}.<br><br>
                                 $submission->assignment_type = $action->assignment->type; // Setting the assignment type of the action
                                 try {
                                     $GLOBALS['action_stack_depth']=0; //To reset the global variable before every task. This is necessary for internal automated operations
-                                    $this->action($submission, $action_request, true); // runs the action method
+                                    $this->action($action_request, $submission, true); // runs the action method
                                     }
                                     catch(\Throwable $e){
                                         //Do nothing

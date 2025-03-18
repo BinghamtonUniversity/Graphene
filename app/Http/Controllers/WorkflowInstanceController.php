@@ -59,7 +59,7 @@ class WorkflowInstanceController extends Controller
         return $workflow_instances->get();
     }
 
-    public function list_user_workflow_instances($group_id = null,Request $request) {
+    public function list_user_workflow_instances(Request $request, $group_id = null) {
         if (!Auth::check()) {
             abort(403); // You must be authenticated to fetch links
         }
@@ -210,7 +210,7 @@ class WorkflowInstanceController extends Controller
             "all"=>$saved,
             "workflow"=>$myWorkflow,
             "instance_id"=>$myWorkflow->id,
-            "resources"=>$this->fetch($myWorkflow,$request,$current),
+            "resources"=>$this->fetch($request,$myWorkflow,$current),
             "container"=>true
         ];
 
@@ -225,7 +225,7 @@ class WorkflowInstanceController extends Controller
         if(!empty($myWorkflow->configuration->template)){
             $template =$myWorkflow->configuration->template;
         }
-        $resources = $this->fetch($myWorkflow,$request,$current);
+        $resources = $this->fetch($request,$myWorkflow,$current);
         if($myWorkflow != null) {
             $renderer = new PageRenderer();
             return $renderer->render([
@@ -262,7 +262,7 @@ class WorkflowInstanceController extends Controller
         }
         abort(404,'Workflow not found');
     }
-    public function context(WorkflowSubmission $workflow_submission, Request $request) {
+    public function context(Request $request, WorkflowSubmission $workflow_submission) {
         $myWorkflow = WorkflowInstance::with('workflow')->find($workflow_submission->workflow_instance_id);
         if($myWorkflow != null) {
             $myWorkflow->findVersion();
@@ -272,15 +272,15 @@ class WorkflowInstanceController extends Controller
                 "submission"=>$workflow_submission,
                 "workflow"=>$myWorkflow,
                 "instance_id"=>$myWorkflow->id,
-                "resources"=>$this->fetch($myWorkflow, $request, $workflow_submission),
+                "resources"=>$this->fetch($request, $myWorkflow, $workflow_submission),
             ];
         }
         abort(404,'Workflow not found');
     }
-    public function report(WorkflowInstance $workflow_instance,Request $request) {
+    public function report(Request $request, WorkflowInstance $workflow_instance) {
         return view('admin', ['resource'=>'workflow_instance_report','id'=>$workflow_instance->id, 'group'=>$workflow_instance->group]);
     }
-    public function raw(WorkflowInstance $workflow_instance,Request $request) {
+    public function raw(Request $request, WorkflowInstance $workflow_instance) {
         return view('admin', ['resource'=>'workflow_instance_raw_data','id'=>$workflow_instance->id, 'group'=>$workflow_instance->group]);
     }
 
@@ -313,7 +313,7 @@ class WorkflowInstanceController extends Controller
             return null;
         }
     }
-    public function getcsv(WorkflowInstance $workflow_instance, Request $request) {
+    public function getcsv(Request $request, WorkflowInstance $workflow_instance) {
         $submissions = WorkflowSubmission::with('workflowVersion')
             ->with('user')
             ->where('workflow_instance_id','=',$workflow_instance->id)
@@ -356,7 +356,7 @@ class WorkflowInstanceController extends Controller
             ->header('Content-Disposition','attachment; filename="'.$workflow_instance->name.'_workflow.csv"');
     }
 
-    public function getraw(WorkflowInstance $workflow_instance, Request $request) {
+    public function getraw(Request $request, WorkflowInstance $workflow_instance) {
         $all_fields = [
             ["type"=>"hidden","name"=>"_w_id",],
             ["type"=>"select","name"=>"_w_status","label"=>"Status","options"=>["open",'closed']],
@@ -399,7 +399,7 @@ class WorkflowInstanceController extends Controller
         return ['data'=>$all_submissions,'schema'=>$all_fields];
     }
 
-    public function list_user_workflow_instance_submissions(WorkflowInstance $workflow_instance, Request $request, $status=null) {
+    public function list_user_workflow_instance_submissions(Request $request, WorkflowInstance $workflow_instance, $status=null) {
         if (is_null($status)) {
             $submissions = WorkflowSubmission::where('user_id',Auth::user()->id)->get();
         } else {
@@ -414,7 +414,7 @@ class WorkflowInstanceController extends Controller
     /* ----- section Borrowed from AppInstance  - refactor to use common code ----- */
 
 
-    public function fetch(WorkflowInstance $workflow_instance,Request $request,WorkflowSubmission $workflow_submission=null) {
+    public function fetch(Request $request, WorkflowInstance $workflow_instance,WorkflowSubmission $workflow_submission=null) {
         // dd($workflow_instance);
 
         if (Auth::check()) { /* User is Authenticated */
@@ -442,7 +442,7 @@ class WorkflowInstanceController extends Controller
         return $this->resourceService->fetch($workflow_instance, $workflow_submission, $request->all());
     }
 
-    public function get_data(WorkflowInstance $workflow_instance,  $endpoint_name,Request $request, WorkflowSubmission $workflow_submission=null) {
+    public function get_data(Request $request, WorkflowInstance $workflow_instance, $endpoint_name, WorkflowSubmission $workflow_submission=null) {
         if (!$workflow_instance->public) {
             if (is_null($workflow_submission)) {
                 // Make sure that the person can fetch the current instance (submission is null)

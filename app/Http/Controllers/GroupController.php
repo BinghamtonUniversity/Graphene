@@ -217,7 +217,7 @@ class GroupController extends Controller
             return 1;
         }
     }
-    public function list_members(Group $group, Request $request)
+    public function list_members(Request $request, Group $group)
     {
         if($request->has('all')){
             return $group->members()->with('bulkuser')->get()->pluck('bulkUser');
@@ -228,7 +228,7 @@ class GroupController extends Controller
             return $group->list_members();
         }
     }
-    public function add_member(Group $group, User $user, Request $request)
+    public function add_member(Request $request, Group $group, User $user)
     {
         if ($request->has('status')) {
             return $group->add_member($user,$request->status);
@@ -244,7 +244,7 @@ class GroupController extends Controller
     {
         return $group->list_admins();
     }
-    public function add_admin(Group $group, User $user, Request $request)
+    public function add_admin(Request $request, Group $group, User $user)
     {
         return $group->add_admin(
             $user,

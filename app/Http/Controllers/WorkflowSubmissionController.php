@@ -137,7 +137,7 @@ class WorkflowSubmissionController extends Controller {
         return ['count'=>$submissions];
     } 
 
-    public function list_instance_workflow_submissions(WorkflowInstance $workflow_instance, Request $request) {
+    public function list_instance_workflow_submissions(Request $request, WorkflowInstance $workflow_instance) {
         if (!Auth::check()) { abort(403); }
         $submissions_raw = WorkflowSubmission::select('assignment_id','assignment_type','created_at','updated_at','opened_at','id','state','status','user_id','workflow_version_id')
             ->with('user')
@@ -177,7 +177,7 @@ class WorkflowSubmissionController extends Controller {
         return $submissions;
     }   
 
-    public function workflow_submission_history(WorkflowSubmission $workflow_submission, Request $request) {
+    public function workflow_submission_history(Request $request, WorkflowSubmission $workflow_submission) {
         if (!Auth::check()) { abort(403); }
         return WorkflowSubmission::where('id','=',$workflow_submission->id)
             ->with('user')
@@ -267,7 +267,7 @@ class WorkflowSubmissionController extends Controller {
         }
     }
 
-    public function report(WorkflowSubmission $workflow_submission,Request $request) {
+    public function report(Request $request, WorkflowSubmission $workflow_submission) {
         $workflow_submission = WorkflowSubmission::where('id','=',$workflow_submission->id)->with('user')->with('workflowVersion')->with('workflow')->first();
 
         if (Auth::check()) { /* User is Authenticated */

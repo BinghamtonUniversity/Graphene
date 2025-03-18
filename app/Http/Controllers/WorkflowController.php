@@ -163,7 +163,7 @@ class WorkflowController extends Controller
             })
             ->get();
     }
-    public function add_developer(Workflow $workflow, User $user, Request $request)
+    public function add_developer(Request $request, Workflow $workflow, User $user)
     {
         if ($request->has('status')) {
             return $workflow->add_developer($user,$request->status);
