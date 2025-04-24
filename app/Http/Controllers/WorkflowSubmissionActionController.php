@@ -38,7 +38,7 @@ class WorkflowSubmissionActionController extends Controller {
     }
     public function create(Request $request, WorkflowInstance $workflow_instance,$save_or_submit='submit') {
         if($request->has('_state') && is_string($request->get('_state'))){
-            $request['_state'] = json_decode($request['_state'],false);
+            $request['_state'] = json_decode($request['_state'],true);
         }
 
         //01/20/2021, AKT - Added the code below to check if the user is authenticated
