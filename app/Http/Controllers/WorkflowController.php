@@ -136,7 +136,16 @@ class WorkflowController extends Controller
             return 1;
         }
     }
-    public function admin(Workflow $workflow) {
+    public function admin(Request $request, Workflow $workflow) {
+
+        if($request->has('v')){
+            return response(view('adminWorkflow', ['workflow'=>WorkflowVersion::with('workflow')->where('workflow_id','=',$workflow->id)->find($request->get('v')) ]))
+            ->header('Content-Type', 'text/html')
+            ->header('Cache-Control', 'no-cache, no-store, must-revalidate')
+            ->header('Expires', '0')
+            ->header('Pragma', 'no-cache');
+        }
+
         return response(view('adminWorkflow', ['workflow'=>WorkflowVersion::with('workflow')->where('workflow_id','=',$workflow->id)->orderBy('created_at', 'desc')->first()]))
         ->header('Content-Type', 'text/html')
         ->header('Cache-Control', 'no-cache, no-store, must-revalidate')

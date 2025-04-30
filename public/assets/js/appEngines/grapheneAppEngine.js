@@ -1,509 +1,814 @@
 function App() {
-	var router = (verb, name, data, callback) => {
-		var callback = callback || function (data) {
-			if (data.error) {
-				if (data.error.message) {
-					modal({ title: "ERROR", content: data.error.message, modal: { header_class: "bg-danger" } });
-				} else {
-					modal({ title: "ERROR", content: data.error, modal: { header_class: "bg-danger" } });
-				}
-			} else {
-				console.log(data);
-			}
-		};
-		(this.options[verb] || _.partial(this.options.crud, _, _, _, verb) || function () { }).call(this, name, data, callback.bind(this))
-	}
-	function redraw() {
-		this.destroy();
-		this.draw();
-	}
-	function refresh(skipFetch) {
-		this.destroy();
-		this.config = $.extend(true, {}, this.options.config);
-		this.$el.html(this.options.defaultHtml);
-		if (!skipFetch) {
-			$.ajax({
-				type: 'POST',
-				url: '/api/fetch/' + this.config.app_instance_id,
-				data: (Lockr.get('/api/apps/instances/' + this.config.app_instance_id + '/user_options') || { options: {} }),
-				success: function (data) {
-					if (typeof data.user.id == 'undefined') {
-						var url = '/api/apps/instances/' + this.config.app_instance_id + '/user_options';
-						data.user.options = (Lockr.get(url) || { options: {} }).options;
-					}
-					// this.app.update(data);
-					_.extend(this.data, data || {});
-					this.app.update();
-					this.load();
-				}.bind(this),
-				error: function (data) {
-					toastr.error(data.statusText, 'An error occured updating App')
-				}
-			})
-		} else {
-			this.load();
-		}
-	}
-	function update(newData, silent) {
-		_.merge(this.data, newData || {});
-		_.each(newData, function (i, name) {
-			this.collections.update(name, i);
-			switch (name) {
-				case "user":
-					if (typeof this.inline !== 'undefined') {
-						this.inline.set(i.options);
-					}
-				case "options":
-					break;
-				default:
-					this.eventBus.dispatch(name, i);
+  var router = (verb, name, data, callback) => {
+    var callback =
+      callback ||
+      function (data) {
+        if (data.error) {
+          if (data.error.message) {
+            modal({
+              title: "ERROR",
+              content: data.error.message,
+              modal: { header_class: "bg-danger" },
+            });
+          } else {
+            modal({
+              title: "ERROR",
+              content: data.error,
+              modal: { header_class: "bg-danger" },
+            });
+          }
+        } else {
+          console.log(data);
+        }
+      };
+    (
+      this.options[verb] ||
+      _.partial(this.options.crud, _, _, _, verb) ||
+      function () {}
+    ).call(this, name, data, callback.bind(this));
+  };
+  function redraw() {
+    this.destroy();
+    this.draw();
+  }
+  function refresh(skipFetch) {
+    this.destroy();
+    this.config = $.extend(true, {}, this.options.config);
+    this.$el.html(this.options.defaultHtml);
+    if (!skipFetch) {
+      $.ajax({
+        type: "POST",
+        url: "/api/fetch/" + this.config.app_instance_id,
+        data: Lockr.get(
+          "/api/apps/instances/" + this.config.app_instance_id + "/user_options"
+        ) || { options: {} },
+        success: function (data) {
+          if (typeof data.user.id == "undefined") {
+            var url =
+              "/api/apps/instances/" +
+              this.config.app_instance_id +
+              "/user_options";
+            data.user.options = (Lockr.get(url) || { options: {} }).options;
+          }
+          // this.app.update(data);
+          _.extend(this.data, data || {});
+          this.app.update();
+          this.load();
+        }.bind(this),
+        error: function (data) {
+          toastr.error(data.statusText, "An error occured updating App");
+        },
+      });
+    } else {
+      this.load();
+    }
+  }
+  function update(newData, silent) {
+    _.merge(this.data, newData || {});
+    _.each(
+      newData,
+      function (i, name) {
+        this.collections.update(name, i);
+        switch (name) {
+          case "user":
+            if (typeof this.inline !== "undefined") {
+              this.inline.set(i.options);
+            }
+          case "options":
+            break;
+          default:
+            this.eventBus.dispatch(name, i);
+        }
+      }.bind(this)
+    );
+    if (typeof this.inline == "object" && this.inline instanceof gform) {
+      this.inline.set(this.data.user.options);
+    }
+    this.ractive.set(this.data);
 
-			}
-		}.bind(this))
-		if (typeof this.inline == 'object' && this.inline instanceof gform) {
-			this.inline.set(this.data.user.options)
-		}
-		this.ractive.set(this.data);
+    this.app.trigger("updated");
+  }
+  function click(selector, callback) {
+    this.$el.off("click", selector, callback);
+    this.$el.on("click", selector, callback.bind(this));
+  }
+  // this.handlers = {initialize: []};
+  // this.addSub = Berry.prototype.addSub;
+  this.forms = {};
+  this.grids = {};
+  //{initialize: [],refetch:[this.handlers.refetch[0]]}
+  this.eventBus = new gform.eventBus(
+    { owner: "instance", item: "resource", handlers: {} },
+    this
+  );
+  this.collections = new gform.collectionManager(this.data);
 
-		this.app.trigger('updated')
-	}
-	function click(selector, callback) {
-		this.$el.off('click', selector, callback);
-		this.$el.on('click', selector, callback.bind(this));
-	}
-	// this.handlers = {initialize: []};
-	// this.addSub = Berry.prototype.addSub;
-	this.forms = {};
-	this.grids = {};
-	//{initialize: [],refetch:[this.handlers.refetch[0]]}
-	this.eventBus = new gform.eventBus({ owner: 'instance', item: 'resource', handlers: {} }, this);
-	this.collections = new gform.collectionManager(this.data)
+  var returnable = {
+    // post:_.partial(router, 'POST').bind(this),
+    // get:_.partial(router, 'GET').bind(this),
+    // put:_.partial(router, 'PUT').bind(this),
+    // patch:_.partial(router, 'PATCH').bind(this),
+    // delete:_.partial(router, 'DELETE').bind(this),
 
-	var returnable = {
-		// post:_.partial(router, 'POST').bind(this),
-		// get:_.partial(router, 'GET').bind(this),
-		// put:_.partial(router, 'PUT').bind(this),
-		// patch:_.partial(router, 'PATCH').bind(this),
-		// delete:_.partial(router, 'DELETE').bind(this),
+    post: _.partial(router, "POST"),
+    get: _.partial(router, "GET"),
+    put: _.partial(router, "PUT"),
+    patch: _.partial(router, "PATCH"),
+    delete: _.partial(router, "DELETE"),
 
-		post: _.partial(router, 'POST'),
-		get: _.partial(router, 'GET'),
-		put: _.partial(router, 'PUT'),
-		patch: _.partial(router, 'PATCH'),
-		delete: _.partial(router, 'DELETE'),
+    redraw: redraw.bind(this),
+    refresh: refresh.bind(this),
 
-		redraw: redraw.bind(this),
-		refresh: refresh.bind(this),
+    refetch: function () {
+      this.app.trigger("refetch");
+    }.bind(this),
 
-		refetch: function () {
-			this.app.trigger('refetch');
-		}.bind(this),
+    update: update.bind(this),
+    click: click.bind(this),
+    on: this.eventBus.on,
+    // off: Berry.prototype.off.bind(this),
+    trigger: this.eventBus.dispatch,
+    options: function (newOptions) {
+      this.app.update({
+        user: $.extend(true, {}, this.data.user, { options: newOptions }),
+      });
+      var url =
+        "/api/apps/instances/" + this.config.app_instance_id + "/user_options";
+      if (typeof this.data.user.id !== "undefined") {
+        $.ajax({
+          type: "POST",
+          dataType: "json",
+          contentType: "application/json",
+          url: url,
+          data: JSON.stringify({ options: newOptions }),
+          success: function (data) {
+            this.app.update({
+              user: $.extend(true, {}, this.data.user, {
+                options: data.options,
+              }),
+            });
+            this.app.trigger("options");
+          }.bind(this),
+          error: function (data) {
+            toastr.error(data.statusText, "An error occured updating options");
+          },
+        });
+      } else {
+        Lockr.set(url, { options: this.data.user.options });
+        this.app.trigger("options");
+      }
+    }.bind(this),
+    $el: this.$el,
+    data: this.data,
+    find: function (selectors) {
+      return this.$el[0].querySelectorAll(selectors);
+    }.bind(this),
+    render: function (template, data) {
+      var local_ractive = Ractive({
+        template: this.partials[template],
+        partials: this.partials,
+        data: _.filter(data, item => typeof item !== "function"),
+        computed: _.filter(data, item => typeof item == "function"),
+      });
+      return local_ractive.toHTML();
 
-		update: update.bind(this),
-		click: click.bind(this),
-		on: this.eventBus.on,
-		// off: Berry.prototype.off.bind(this),
-		trigger: this.eventBus.dispatch,
-		options: function (newOptions) {
-			this.app.update({ user: $.extend(true, {}, this.data.user, { options: newOptions }) });
-			var url = '/api/apps/instances/' + this.config.app_instance_id + '/user_options';
-			if (typeof this.data.user.id !== 'undefined') {
-				$.ajax({
-					type: 'POST',
-					dataType: 'json',
-					contentType: 'application/json',
-					url: url,
-					data: JSON.stringify({ 'options': newOptions }),
-					success: function (data) {
-						this.app.update({ user: $.extend(true, {}, this.data.user, { options: data.options }) });
-						this.app.trigger('options');
-					}.bind(this),
-					error: function (data) {
-						toastr.error(data.statusText, 'An error occured updating options')
-					}
-				})
-			} else {
-				Lockr.set(url, { 'options': this.data.user.options })
-				this.app.trigger('options');
-			}
+      // return gform.m(this.partials[template],_.extend({}, this.partials, data));
+      // return Hogan.compile(this.partials[template]).render(data || this.data);
+    }.bind(this),
+    version: function () {
+      return "1.2.0";
+    },
+    findForm: function (name) {
+      var form = _.find(this.options.config.forms, { name: name });
+      if (typeof form !== "undefined") {
+        try {
+          form = JSON.parse(form.content);
+          form.collections = this.collections;
+          form.methods = this.method;
+          return form;
+        } catch (e) {
+          this.app.debug("Failed to parse form:" + name);
+        }
+      }
+    }.bind(this),
+    form: function (name, target, options) {
+      if (typeof this.forms[name] == "undefined") {
+        if (typeof target == "string") {
+          target = this.app.find(target)[0];
+        }
+        if (typeof name == "string") {
+          var formOptions = _.cloneDeep(this.app.findForm(name)); //_.find(this.options.config.forms,{name:name})
+          if (typeof formOptions !== "undefined") {
+            // var formOptions = JSON.parse(form.content);
+            formOptions.private = true;
+            formOptions.collections = this.collections;
+            formOptions.selector = target;
+            formOptions.methods = this.methods;
+            formOptions.data = this.app.data[name] || this.app;
 
-		}.bind(this),
-		$el: this.$el,
-		data: this.data,
-		find: function (selectors) {
-			return this.$el[0].querySelectorAll(selectors)
-		}.bind(this),
-		render: function (template, data) {
-			var local_ractive = Ractive({
-				template: this.partials[template],
-				partials: this.partials,
-				data: data
-			});
-			return local_ractive.toHTML();
+            if (typeof target == "string") {
+              target = this.app.find(target)[0];
+            }
+            this.forms[name] = new gform(_.merge(formOptions, options), target);
 
-			// return gform.m(this.partials[template],_.extend({}, this.partials, data));
-			// return Hogan.compile(this.partials[template]).render(data || this.data);
-		}.bind(this),
-		version: function () { return '1.2.0' },
-		findForm: function (name) {
-			var form = _.find(this.options.config.forms, { name: name })
-			if (typeof form !== 'undefined') {
-				try {
-					form = JSON.parse(form.content);
-					form.collections = this.collections;
-					form.methods = this.method;
-					return form;
-				} catch (e) {
-					this.app.debug('Failed to parse form:' + name)
-				}
-			}
-		}.bind(this),
-		form: function (name, target, options) {
-			if (typeof this.forms[name] == 'undefined') {
+            return this.forms[name];
+          }
+        } else {
+          var formOptions = name;
+          formOptions.private = true;
+          formOptions.collections = this.collections;
+          formOptions.selector = target;
+          formOptions.methods = this.methods;
+          formOptions.data = this.app.data[name] || this.app;
+          var newForm = new gform(_.merge(formOptions, options), target);
+          this.forms[newForm.name] = newForm;
+          return this.forms[newForm.name];
+        }
+      } else {
+        if (typeof options == "object") {
+          if ("data" in options) {
+            this.forms[name].set(options.data);
+          }
+        }
+        if (typeof target !== "undefined") {
+          if (typeof target == "string") {
+            target = this.app.find(target)[0];
+          }
+          if (target !== this.forms[name].el) this.forms[name].attach(target);
+        }
+      }
 
-				if (typeof target == 'string') {
-					target = this.app.find(target)[0];
-				}
-				if (typeof name == 'string') {
-					var formOptions = _.cloneDeep(this.app.findForm(name));//_.find(this.options.config.forms,{name:name})
-					if (typeof formOptions !== 'undefined') {
-						// var formOptions = JSON.parse(form.content);
-						formOptions.private = true;
-						formOptions.collections = this.collections;
-						formOptions.selector = target;
-						formOptions.methods = this.methods;
-						formOptions.data = this.app.data[name] || this.app;
+      return this.forms[name];
+    }.bind(this),
+    grid: function (name, options) {
+      if (typeof this.grids[name] == "undefined") {
+        // _.each(['create','edit','form'],function(i){
+        // 	if(typeof options[i] == 'string'){
+        // 		options[i] = this.app.findForm(options[i])
+        // 	}
+        // })
+        options = options || {};
+        if (typeof options.create == "string") {
+          options.create = _.cloneDeep(this.app.findForm(options.create));
+        }
+        if (typeof options.edit == "string") {
+          options.edit = _.cloneDeep(this.app.findForm(options.edit));
+        }
+        if (typeof options.form == "undefined") {
+          this.app.debug("Form required for grid:" + name);
+        }
 
-						if (typeof target == 'string') {
-							target = this.app.find(target)[0];
-						}
-						this.forms[name] = new gform(_.merge(formOptions, options), target)
+        if (typeof options.form == "string") {
+          options.form = _.cloneDeep(this.app.findForm(options.form));
+        }
 
-						return this.forms[name]
-					}
-				} else {
-					var formOptions = name;
-					formOptions.private = true;
-					formOptions.collections = this.collections;
-					formOptions.selector = target;
-					formOptions.methods = this.methods;
-					formOptions.data = this.app.data[name] || this.app;
-					var newForm = new gform(_.merge(formOptions, options), target)
-					this.forms[newForm.name] = newForm;
-					return this.forms[newForm.name]
-				}
-			} else {
-				if (typeof options == 'object') {
-					if ('data' in options) {
-						this.forms[name].set(options.data)
-					}
-				}
-				if (typeof target !== 'undefined') {
-					if (typeof target == 'string') {
-						target = this.app.find(target)[0];
-					}
-					if (target !== this.forms[name].el) this.forms[name].attach(target);
-				}
-			}
+        this.grids[name] = new GrapheneDataGrid(
+          _.extend(
+            {
+              methods: this.methods,
+              collections: this.collections,
+              data: this.data[options.resource || name],
+            },
+            options
+          )
+        ); //new gform(formOptions,this.app.find(target)[0])
+        if (typeof options.resource !== "undefined") {
+          this.collections.on(
+            options.resource,
+            function (e) {
+              this.load(e.collection);
+            }.bind(this.grids[name])
+          );
 
-			return this.forms[name]
+          if (options.rest) {
+            this.grids[name].on(
+              "model:created",
+              function (e) {
+                this.app.post(e.grid.resource, e.model.attributes);
+              }.bind(this)
+            );
+            this.grids[name].on(
+              "model:edited",
+              function (e) {
+                this.app.put(e.grid.resource, e.model.attributes);
+              }.bind(this)
+            );
+            this.grids[name].on(
+              "model:deleted",
+              function (e) {
+                this.app.delete(e.grid.resource, e.model.attributes);
+              }.bind(this)
+            );
+          }
+        }
+      }
+      return this.grids[name];
+    }.bind(this),
+    debug: function (text, type) {
+      if (this.data.user.site_developer) {
+        if (typeof text == "string") {
+          console.log(
+            "%c" + this.config.title + ": %c" + text,
+            "color: #d85e16",
+            "color: #333"
+          );
+        }
+        if (typeof text == "object") {
+          console[type || "log"](
+            "%c" + this.config.title + "",
+            "color: #d85e16"
+          );
+          console[type || "log"](text);
+        }
+      }
+    }.bind(this),
 
-		}.bind(this),
-		grid: function (name, options) {
-			if (typeof this.grids[name] == 'undefined') {
-				// _.each(['create','edit','form'],function(i){
-				// 	if(typeof options[i] == 'string'){
-				// 		options[i] = this.app.findForm(options[i])
-				// 	}
-				// })
-				options = options || {};
-				if (typeof options.create == 'string') {
-					options.create = _.cloneDeep(this.app.findForm(options.create))
-				}
-				if (typeof options.edit == 'string') {
-					options.edit = _.cloneDeep(this.app.findForm(options.edit))
-				}
-				if (typeof options.form == 'undefined') {
-					this.app.debug('Form required for grid:' + name)
-				}
+    modal: function (options, data) {
+      if (typeof options == "string") {
+        options = { content: options };
+      }
+      var hClass = "";
+      switch (options.status) {
+        case "error":
+          hClass = "bg-danger";
+          break;
+        case "success":
+          hClass = "bg-success";
+          break;
+        case "primary":
+          hClass = "bg-primary";
+          break;
+        case "info":
+          hClass = "bg-info";
+          break;
+        case "warning":
+          hClass = "bg-warning";
+          break;
+      }
+      return new gform({
+        legend: options.title,
+        modal: { header_class: hClass },
+        fields: [
+          {
+            type: "output",
+            name: "modal",
+            label: false,
+            format: {},
+            value: gform.m(options.content, _.extend({}, this.partials, data)),
+          },
+        ],
+        actions: options.actions || [
+          {
+            type: "cancel",
+            label: '<i class="fa fa-times"></i> Close',
+            modifiers: "btn btn-default pull-right",
+          },
+        ],
+      })
+        .modal()
+        .on("cancel", function (e) {
+          e.form.dispatch("close");
+          e.form.destroy();
+        });
+    }.bind(this),
+    alert: function (options, data) {
+      if (typeof options == "string") {
+        options = { content: options };
+      }
+      toastr[options.status || "info"](
+        gform.m(options.content || "", _.extend({}, this.partials, data)),
+        options.title
+      );
+    }.bind(this),
+    //dialog
 
-				if (typeof options.form == 'string') {
-					options.form = _.cloneDeep(this.app.findForm(options.form))
-				}
-
-
-
-				this.grids[name] = new GrapheneDataGrid(_.extend({ methods: this.methods, collections: this.collections, data: this.data[options.resource || name] }, options))//new gform(formOptions,this.app.find(target)[0])
-				if (typeof options.resource !== 'undefined') {
-					this.collections.on(options.resource, function (e) {
-						this.load(e.collection);
-					}.bind(this.grids[name]))
-
-					if (options.rest) {
-						this.grids[name].on('model:created', function (e) {
-							this.app.post(e.grid.resource, e.model.attributes)
-						}.bind(this))
-						this.grids[name].on('model:edited', function (e) {
-							this.app.put(e.grid.resource, e.model.attributes)
-						}.bind(this))
-						this.grids[name].on('model:deleted', function (e) {
-							this.app.delete(e.grid.resource, e.model.attributes)
-						}.bind(this))
-					}
-				}
-
-			}
-			return this.grids[name]
-		}.bind(this),
-		debug: function (text, type) {
-			if (this.data.user.site_developer) {
-				if (typeof text == 'string') {
-					console.log('%c' + this.config.title + ': %c' + text, 'color: #d85e16', 'color: #333')
-				}
-				if (typeof text == 'object') {
-					console[type || 'log']('%c' + this.config.title + '', 'color: #d85e16')
-					console[type || 'log'](text)
-				}
-			}
-		}.bind(this),
-
-		modal: function (options, data) {
-
-			if (typeof options == 'string') {
-				options = { content: options };
-			}
-			var hClass = ''
-			switch (options.status) {
-				case 'error':
-					hClass = 'bg-danger';
-					break;
-				case 'success':
-					hClass = 'bg-success';
-					break;
-				case 'primary':
-					hClass = 'bg-primary';
-					break;
-				case 'info':
-					hClass = 'bg-info';
-					break;
-				case 'warning':
-					hClass = 'bg-warning';
-					break;
-			}
-			return new gform({ legend: options.title, modal: { header_class: hClass }, fields: [{ type: 'output', name: 'modal', label: false, format: {}, value: gform.m(options.content, _.extend({}, this.partials, data)) }], actions: (options.actions || [{ type: 'cancel', label: '<i class="fa fa-times"></i> Close', "modifiers": "btn btn-default pull-right" }]) }).modal().on('cancel', function (e) {
-				e.form.dispatch('close');
-				e.form.destroy();
-			});
-		}.bind(this),
-		alert: function (options, data) {
-			if (typeof options == 'string') {
-				options = { content: options };
-			}
-			toastr[options.status || 'info'](gform.m(options.content || '', _.extend({}, this.partials, data)), options.title)
-		}.bind(this)
-		//dialog
-
-		//state
-		//table/grid
-		//chart
-		//use promises and local fetch?
-	}
-	_.each(this.methods, function (method, key) {
-		if (typeof returnable[key] == 'undefined') {
-			returnable[key] = method.bind(this);
-		}
-	})
-	return returnable;
+    //state
+    //table/grid
+    //chart
+    //use promises and local fetch?
+  };
+  _.each(this.methods, function (method, key) {
+    if (typeof returnable[key] == "undefined") {
+      returnable[key] = method.bind(this);
+    }
+  });
+  return returnable;
 }
-$g.engines['graphene'] = {
-	'v1':
-		function (options) {
+$g.engines["graphene"] = {
+  v1: function (options, item) {
+    var temp = function (options, item) {
+      let hashRouter = (hashState = {}) => {
+        app.hashState = hashState;
+        app.pathname = "";
+        _.each(hashState.watch, (settings, key) => {
+          let { value = null, callback } = settings;
+          Object.defineProperty(app, key, {
+            get: () => app.data[key] || value,
+            set: newVal => {
+              if (
+                newVal == app.data[key] ||
+                (app.data[key] == value && newVal === null)
+              )
+                return;
+              app.update({ [key]: newVal === null ? value : newVal });
+            },
+          });
+          if (typeof callback == "function") app.on(key, callback);
+        });
 
-			var temp = function (options) {
-				this.load = function () {
-					this.partials = {};
-					for (var i in this.config.templates) {
-						this.partials[this.config.templates[i].name] = this.config.templates[i].content;
-					}
+        app.on(_.keys(hashState.watch).join(" "), e => {
+          let newHashObj = _.pick(app.data, _.keys(hashState.watch));
+          _.each(newHashObj, (item, index) => {
+            if (item === "" || item === null) delete newHashObj[index];
+          });
+          let newhash =
+            "#" +
+            app.pathname +
+            "?" +
+            new URLSearchParams(newHashObj).toString();
 
-					if (typeof this.config.scripts == 'object') {
+          if (location.hash == newhash) return;
+          if (history.pushState) {
+            history[
+              location.hash == "#" + app.pathname ? "replaceState" : "pushState"
+            ](null, null, newhash);
+          } else {
+            location.hash = newhash;
+          }
+        });
+        let updateFromHash = e => {
+          let { hash } =
+            typeof e !== "undefined" && "newURL" in e
+              ? new URL(e.newURL)
+              : window.location;
+          let [pathname, search] = hash.split("#").pop().split("?");
+          let { routes } = app.hashState;
+          app.pathname = pathname;
 
-						this.config.script = _.reduce(this.config.scripts, function (sum, n) {
-							return sum + ';\n\n\n/*-- New File - ' + n.name + ' --*/\n\n' + n.content;
-						}, '//' + this.config.title + ' (' + this.config.app_instance_id + ')\nfunction mount(){var context = this;app.data = app.data||data;\n/*- Custom Code starts Here -*/');
-						this.config.script += '\n\n/*- Custom Code Ends Here -*/;return function(){return this;}.bind(this);}'
+          app.search = search;
+          query = Object.fromEntries(new URLSearchParams(search));
 
-					}
+          let temp = app.pathname.split("/");
+          let keyedPaths = _.map(routes, (value, route) => {
+            let nr = /^(?<any>\*)+|(:(?<key>[^\/^?]+)(?<optional>\??))/;
+            return {
+              paths: route.split("/").map(section => {
+                let match = section.match(nr);
+                return match === null ? { path: section } : match.groups;
+              }),
+              result: value,
+            };
+          });
 
-					var mountFunc = (function (data, script) {
-						// try{
-						// eval((debug.state)?script:script.split('debugger').join(''));
-						eval(script);
-						return mount.call({ data: data, app: app });
-						// }catch(e){
-						// }		
-					})(this.options.data || {}, this.config.script)
-					if (typeof mountFunc !== 'undefined') {
-						mountResult = mountFunc();
+          let results = _.find(keyedPaths, ({ paths }, i) => {
+            return (
+              paths.length == temp.length &&
+              _.every(paths, ({ path, key, optional }, i) => {
+                return path !== undefined
+                  ? path == temp[i]
+                  : key !== undefined
+                  ? optional || (i in temp && temp[i].length)
+                  : false;
+              })
+            );
+          });
 
-						if (typeof mountResult !== 'undefined') {
-							this.data = mountResult.data;
-							this.methods = {};
-							for (var i in mountResult) {
-								if (typeof mountResult[i] == 'function') {
-									this.methods[i] = mountResult[i].bind(this);
-								}
-							}
-							for (var i in mountResult.app) {
-								if (typeof mountResult.app[i] == 'function') {
-									this.methods[i] = mountResult.app[i].bind(this);
-								}
-							}
-						} else {
-							this.data = this.options.data;
-						}
-					} else {
-						this.data = this.options.data;
-					}
+          //remove leading empty path
+          // debugger;
 
-					this.data.options = $.extend({}, this.data.options);
+          if (
+            app.pathname[0] == "/" &&
+            _.isEqual(results.paths[0], { path: "" }) &&
+            temp[0] == ""
+          ) {
+            results.paths.shift();
+            temp.shift();
+          }
 
-					this.$el = this.options.$el;
+          if (results) {
+            let keys = _.map(results.paths, ({ key }, i) =>
+              key !== undefined ? key : i
+            );
+            (typeof results.result == "function"
+              ? results.result
+              : data => {
+                  if (typeof results.result == "string") {
+                    console.log($g.render(results.result, data));
+                  } else {
+                    app.update(results.result);
+                    //   console.table(data);
+                  }
+                }
+            ).apply(null, [
+              {
+                pathname,
+                query,
+                ..._.zipObject(keys, temp),
+              },
+              ..._.filter(
+                temp,
+                (item, i) =>
+                  "key" in results.paths[i] &&
+                  results.paths[i].key !== undefined
+              ),
+            ]);
+          } else {
+            if (pathname.length) {
+              console.error(
+                $g.render(
+                  routes["404"] || "404 - path not found ({{hash}})",
+                  _.zipObject(["message"], temp[0] || "")
+                )
+              );
+            }
+          }
+          app.update({
+            ..._.pick(app.data, _.keys(hashState.watch)),
+            ...query,
+          });
+        };
 
-					if (typeof this.app == 'undefined') {
-						this.app = App.call(this)
-						app = this.app;
+        _.reduce(
+          hashState.watch,
+          (initialData, obj, key) => {
+            if (key in app.data) return;
+            initialData[key] = obj.value;
+            return initialData;
+          },
+          app.data
+        );
+        updateFromHash();
+        window.onhashchange = updateFromHash;
+        window.addEventListener("beforeunload", e => {
+          let warn = false;
+          debugger;
+          switch (typeof app.hashState.unload) {
+            case "function":
+              warn = app.hashState.unload();
+              break;
+            case "default":
+              warn = app.hashState.unload || warn;
+              break;
+          }
 
-						// Object.defineProperty(app,'debugger',{
-						// 	get: ()=>{if(debug.state)debugger;},
-						// 	configurable: false,
-						//   });
-					}
-					this.draw()
-					if (typeof this.options.onLoad == 'function') {
-						this.options.onLoad.call(this);
-					}
-				}
+          if (!warn) {
+            return undefined;
+          }
 
-				this.draw = function () {
-					this.options.defaultHtml = this.$el.html();
-					if (typeof this.component == 'undefined') {
-						this.component = Ractive.extend(
-							{ data: this.methods, css: this.options.config.css, template: this.partials[this.options.template || 'Main'] || this.partials['Main'] || this.partials['main'], partials: this.partials }
-						)
-					}
-					this.ractive = this.component({ data: this.data, el: this.$el[0], on: this.methods });
-					// this.ractive = new Ractive({el: this.$el[0], template: this.partials[this.options.template || 'Main']|| this.partials['Main'] || this.partials['main'], data: this.data, partials: this.partials});
+          var confirmationMessage = warn;
 
-					this.$el.find('[data-toggle="tooltip"]').tooltip();
-					this.$el.find('[data-toggle="popover"]').popover();
+          (e || window.event).returnValue = confirmationMessage; //Gecko + IE
+          return confirmationMessage; //Gecko + Webkit, Safari, Chrome etc.
+        });
+      };
+      this.load = function () {
+        this.partials = {};
+        for (var i in this.config.templates) {
+          this.partials[this.config.templates[i].name] =
+            this.config.templates[i].content;
+        }
 
-					if (this.$el.find('[data-inline]').length && this.options.config.forms[1].content.length) {//} > 0 && this.userEdit.length > 0){
-						this.inline = new gform({
-							actions: JSON.parse(this.options.config.forms[1].content).actions || [], default: {
-								hideLabel: true, type: 'text', format: { label: '{{label}}', value: '{{value}}' }, target: function () {
-									return '[data-inline="' + this.name + '"]'
-								}
-							}, clear: false, data: this.options.data.user.options, fields: JSON.parse(this.options.config.forms[1].content).fields, legend: 'Edit ' + this.type
-						}, this.$el[0])
-							.on('save', function (e) {
-								this.app.options(e.form.get())
-								// this.app.update( { user: $.extend(true,{},this.data.user,{ options: this.inline.toJSON() }  )});
-								// 	var url = '/api/apps/instances/' + this.config.app_instance_id + '/user_options';
-								// 	if(typeof this.data.user.id !== 'undefined') {
-								// 		$.ajax({
-								// 			type: 'POST',
-								// 			url:url,
-								// 			data: {'options': this.inline.toJSON()},
-								// 			success:function(data){
-								// 				this.app.update( { user: $.extend(true,{},this.data.user,{ options: data.options}  )});
-								// 				this.optionsupdated();
-								// 			}.bind(this),
-								// 			error:function(data) {
-								// 				toastr.error(data.statusText, 'An error occured updating options')
-								// 			}
-								// 		})
-								// 	}else{
-								// 		Lockr.set(url, {'options': this.data.user.options})
-								// 		this.optionsupdated();
-								// 	}
+        if (typeof this.config.scripts == "object") {
+          this.config.script = _.reduce(
+            this.config.scripts,
+            function (sum, n) {
+              return (
+                sum +
+                ";\n\n\n/*-- New File - " +
+                n.name +
+                " --*/\n\n" +
+                n.content
+              );
+            },
+            "//" +
+              this.config.title +
+              " (" +
+              this.config.app_instance_id +
+              ")\nfunction mount(){var context = this;app.data = app.data||data;\n/*- Custom Code starts Here -*/"
+          );
+          this.config.script +=
+            "\n\n/*- Custom Code Ends Here -*/;return function(){return this;}.bind(this);}";
+        }
+        var mountFunc = (function (data, script) {
+          // try{
+          // eval((debug.state)?script:script.split('debugger').join(''));
+          eval(script);
+          return mount.call({ data, app });
+          // }catch(e){
+          // }
+        })(this.options.data || {}, this.config.script);
+        if (typeof mountFunc !== "undefined") {
+          mountResult = mountFunc();
 
-							}.bind(this));
+          if (typeof mountResult !== "undefined") {
+            this.data = mountResult.data;
+            this.methods = {};
+            for (var i in mountResult) {
+              if (typeof mountResult[i] == "function") {
+                this.methods[i] = mountResult[i].bind(this);
+              }
+            }
+            for (var i in mountResult.app) {
+              if (typeof mountResult.app[i] == "function") {
+                this.methods[i] = mountResult.app[i].bind(this);
+              }
+            }
+          } else {
+            this.data = this.options.data;
+          }
+        } else {
+          this.data = this.options.data;
+        }
 
+        this.data.options = $.extend({}, this.data.options);
 
-						this.$el.find('form').on('submit', function (e) {
-							e.preventDefault();
-							this.inline.trigger('save');
-						}.bind(this));
+        this.$el = this.options.$el;
 
-						this.$el.find('[data-inline="submit"]').on('click', function () {
-							this.inline.trigger('save');
-						}.bind(this));
+        if (typeof this.app == "undefined") {
+          this.app = App.call(this);
+          app = this.app;
 
+          Object.defineProperty(app, "item", {
+            get: () => item,
+          });
+          // Object.defineProperty(app,'debugger',{
+          // 	get: ()=>{if(debug.state)debugger;},
+          // 	configurable: false,
+          //   });
+        }
+        this.draw();
+        if (typeof this.options.onLoad == "function") {
+          this.options.onLoad.call(this);
+        }
+      };
 
-						this.$el.find('[data-form]').each(function (index, form) {
-							this.app.form(form.dataset.form, form)
-						}.bind(this))
+      this.draw = function () {
+        this.options.defaultHtml = this.$el.html();
+        if (typeof this.component == "undefined") {
+          this.component = Ractive.extend({
+            data: this.methods,
+            css: this.options.config.css,
+            template:
+              this.partials[this.options.template || "Main"] ||
+              this.partials["Main"] ||
+              this.partials["main"],
+            partials: this.partials,
+          });
+        }
+        this.ractive = this.component({
+          data: this.data,
+          el: this.$el[0],
+          on: this.methods,
+        });
+        // this.ractive = new Ractive({el: this.$el[0], template: this.partials[this.options.template || 'Main']|| this.partials['Main'] || this.partials['main'], data: this.data, partials: this.partials});
 
-						// _.each(this.forms,function(form, name){
-						// 	var selector = form.options.selector;
-						// 	form.destroy();
-						// 	delete this.forms[name];
-						// 	this.app.form(name,selector);
-						// }.bind(this))
-					}
+        this.$el.find('[data-toggle="tooltip"]').tooltip();
+        this.$el.find('[data-toggle="popover"]').popover();
 
+        if (
+          this.$el.find("[data-inline]").length &&
+          this.options.config.forms[1].content.length
+        ) {
+          //} > 0 && this.userEdit.length > 0){
+          this.inline = new gform(
+            {
+              actions:
+                JSON.parse(this.options.config.forms[1].content).actions || [],
+              default: {
+                hideLabel: true,
+                type: "text",
+                format: { label: "{{label}}", value: "{{value}}" },
+                target: function () {
+                  return '[data-inline="' + this.name + '"]';
+                },
+              },
+              clear: false,
+              data: this.options.data.user.options,
+              fields: JSON.parse(this.options.config.forms[1].content).fields,
+              legend: "Edit " + this.type,
+            },
+            this.$el[0]
+          ).on(
+            "save",
+            function (e) {
+              this.app.options(e.form.get());
+              // this.app.update( { user: $.extend(true,{},this.data.user,{ options: this.inline.toJSON() }  )});
+              // 	var url = '/api/apps/instances/' + this.config.app_instance_id + '/user_options';
+              // 	if(typeof this.data.user.id !== 'undefined') {
+              // 		$.ajax({
+              // 			type: 'POST',
+              // 			url:url,
+              // 			data: {'options': this.inline.toJSON()},
+              // 			success:function(data){
+              // 				this.app.update( { user: $.extend(true,{},this.data.user,{ options: data.options}  )});
+              // 				this.optionsupdated();
+              // 			}.bind(this),
+              // 			error:function(data) {
+              // 				toastr.error(data.statusText, 'An error occured updating options')
+              // 			}
+              // 		})
+              // 	}else{
+              // 		Lockr.set(url, {'options': this.data.user.options})
+              // 		this.optionsupdated();
+              // 	}
+            }.bind(this)
+          );
 
-					// _.each(this.forms,function(form, name){
-					// }.bind(this))
+          this.$el.find("form").on(
+            "submit",
+            function (e) {
+              e.preventDefault();
+              this.inline.trigger("save");
+            }.bind(this)
+          );
 
-					if (typeof this.methods !== 'undefined' && typeof this.methods[this.options.initializer] !== 'undefined') {
+          this.$el.find('[data-inline="submit"]').on(
+            "click",
+            function () {
+              this.inline.trigger("save");
+            }.bind(this)
+          );
 
-						this.methods[this.options.initializer].call(this, this);
-						this.app.on('call', function (name, args) {
-							if (typeof this.methods[name] !== 'undefined') { this.methods[name].call(this, args.args) }
-						})
-						this.app.on('apply', function (name, args) {
-							if (typeof this.methods[name] !== 'undefined') { this.methods[name].apply(this, args.args) }
-						})
-					}
-				}
-				this.call = function (method, args) {
-					this.app.trigger('call', method, args);
-				}
-				this.destroy = function () {
-					this.$el.off('click');
-					// this.handlers = {initialize: [],refetch:[this.handlers.refetch[0]]};
-					//
-					this.eventBus.handlers = {};
-					// this.eventBus.handlers = {initialize: [],refetch:[this.eventBus.handlers.refetch[0]]};// = new gform.eventBus({owner:'app',item:'resource',handlers:{initialize: [],refetch:[this.eventBus.handlers.refetch[0]]}}, this);
-					if (typeof this.inline == 'object' && this.inline instanceof gform) {
-						this.inline.destroy();
-					}
-					_.each(this.forms, function (form, name) {
-						form.destroy();
-						delete this.forms[name];
-					}.bind(this))
+          this.$el.find("[data-form]").each(
+            function (index, form) {
+              this.app.form(form.dataset.form, form);
+            }.bind(this)
+          );
 
-					_.each(this.grids, function (grid, name) {
-						grid.destroy();
-						delete this.grids[name];
-					}.bind(this))
-					this.app.trigger('destroy')
-					this.ractive.teardown();
-				}
-				this.options = $.extend(true, {}, options);
-				this.options.initializer = this.options.initializer || 'callback'
-				this.config = this.options.config;
+          // _.each(this.forms,function(form, name){
+          // 	var selector = form.options.selector;
+          // 	form.destroy();
+          // 	delete this.forms[name];
+          // 	this.app.form(name,selector);
+          // }.bind(this))
+        }
 
-				this.get = function () {
-					return this.data;
-				}
-				setTimeout(this.load.bind(this), 0)
-			}
+        // _.each(this.forms,function(form, name){
+        // }.bind(this))
 
-			var newtemp = new temp(options);
-			var app = {};
-			return newtemp;
-		}
-}
+        if (
+          typeof this.methods !== "undefined" &&
+          typeof this.methods[this.options.initializer] !== "undefined"
+        ) {
+          if (typeof watchHash !== "undefined") {
+            hashRouter.call(this, watchHash || {});
+          }
+          this.methods[this.options.initializer].call(this, this);
+          this.app.on("call", function (name, args) {
+            if (typeof this.methods[name] !== "undefined") {
+              this.methods[name].call(this, args.args);
+            }
+          });
+          this.app.on("apply", function (name, args) {
+            if (typeof this.methods[name] !== "undefined") {
+              this.methods[name].apply(this, args.args);
+            }
+          });
+        }
+      };
+      this.call = function (method, args) {
+        this.app.trigger("call", method, args);
+      };
+      this.destroy = function () {
+        this.$el.off("click");
+        // this.handlers = {initialize: [],refetch:[this.handlers.refetch[0]]};
+        //
+        this.eventBus.handlers = {};
+        // this.eventBus.handlers = {initialize: [],refetch:[this.eventBus.handlers.refetch[0]]};// = new gform.eventBus({owner:'app',item:'resource',handlers:{initialize: [],refetch:[this.eventBus.handlers.refetch[0]]}}, this);
+        if (typeof this.inline == "object" && this.inline instanceof gform) {
+          this.inline.destroy();
+        }
+        _.each(
+          this.forms,
+          function (form, name) {
+            form.destroy();
+            delete this.forms[name];
+          }.bind(this)
+        );
+
+        _.each(
+          this.grids,
+          function (grid, name) {
+            grid.destroy();
+            delete this.grids[name];
+          }.bind(this)
+        );
+        this.app.trigger("destroy");
+        this.ractive.teardown();
+      };
+      this.options = $.extend(true, {}, options);
+      this.options.initializer = this.options.initializer || "callback";
+      this.config = this.options.config;
+
+      this.get = function () {
+        return this.data;
+      };
+
+      setTimeout(this.load.bind(this), 0);
+    };
+
+    var newtemp = new temp(options, item);
+    var app = { item: _.clone(item) };
+    return newtemp;
+  },
+};

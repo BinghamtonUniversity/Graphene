@@ -958,7 +958,8 @@ Cobler.types.WorkflowSubmissionReport = function (container) {
                     fields: [
                       {
                         name: "comment",
-                        label: "Comment",
+                        label: 'Comment <i class="text-muted">(optional)</i>',
+                        help: "<small>if a comment is not necessary this can be left blank</small>",
                         type: "textarea",
                         length: 255,
                       },
