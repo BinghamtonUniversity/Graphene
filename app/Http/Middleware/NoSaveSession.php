@@ -4,23 +4,23 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Session\Store;
 use Illuminate\Support\Facades\Session;
 
-class ReadOnlySession
+class NoSaveSession
 {
     public function handle(Request $request, Closure $next)
     {
-        // Start the session to allow reads
+        // Switch to the nosave_database driver
+        config(['session.driver' => 'nosave_database']);
+
+        // Start the session
         $session = Session::getFacadeRoot();
         $session->start();
 
         // Handle the request
         $response = $next($request);
 
-        // Prevent session save to avoid writes
-        // Instead of calling $session->save(), we skip it
-        // This ensures no UPDATE queries are issued
+        // Skip saving to prevent writes
         return $response;
     }
 }

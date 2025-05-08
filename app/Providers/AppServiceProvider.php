@@ -27,8 +27,14 @@ class AppServiceProvider extends ServiceProvider
      */
      public function boot(ConnectionInterface $connection)
      {
-        
-     }
+        Session::extend('nosave_database', function ($app) {
+            // Resolve the database connection
+            $connection = $app->make(ConnectionInterface::class);
+            $table = config('session.table', 'sessions');
+            $minutes = config('session.lifetime', 120);
+            return new \App\Libraries\NoSaveDatabaseSessionHandler($connection, $table, $minutes);
+        });    
+    }
 
     /**
      * Register any application services.
