@@ -47,4 +47,4 @@ Route::group(['middleware' => ['public.api.auth','session.readonly'], 'prefix' =
     Route::delete('/users/{unique_id}','UserController@inactivate');
 
     //look into user deletion as it relates to workflow history - possibly only remove site membership
-});
+})->withoutMiddleware([\Illuminate\Session\Middleware\StartSession::class]);
