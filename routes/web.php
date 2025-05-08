@@ -65,7 +65,10 @@ Route::group(['middleware' => ['custom.auth'],'prefix' => 'admin'], function () 
   Route::get('/sites/{site}/templates', 'SiteController@templates')->middleware('can:get,site');
 });
 
-Route::group(['prefix' => 'api','middleware' => ['session.readonly']], function () {
+Route::group(['prefix' => 'api',
+              'middleware' => ['session.readonly'],
+              'withoutMiddleware' => [\Illuminate\Session\Middleware\StartSession::class],
+            ], function () {
     Route::post('/usersetup', 'UserController@init');
 
     /***** Dashboard  *****/
@@ -297,7 +300,7 @@ Route::group(['prefix' => 'api','middleware' => ['session.readonly']], function 
     Route::post('/proxy/{slug}/{route}/{object_id?}/{action?/{selection?}','APIServerController@fetch')->middleware('can:create,App\App');; 
     Route::put('/proxy/{slug}/{route}/{object_id?}/{action?}/{selection?}','APIServerController@fetch')->middleware('can:create,App\App');; 
     Route::delete('/proxy/{slug}/{route}/{object_id?}/{action?}/{selection?}','APIServerController@fetch')->middleware('can:create,App\App');; 
-  })->withoutMiddleware([\Illuminate\Session\Middleware\StartSession::class]);
+  });
 
 Route::group(['middleware' => ['custom.auth'],'prefix' => 'admin/apiserver'], function () {
   Route::get('/{slug}/apis/{api_id}', 'APIServerController@api')->middleware('can:create,App\App');

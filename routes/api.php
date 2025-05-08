@@ -3,8 +3,10 @@
 use Illuminate\Http\Request;
 
 /* Note: All Routes in this file are automatically prepended with /api */
-Route::group(['middleware' => ['public.api.auth','session.readonly'], 'prefix' => 'public'], function () {
-
+Route::group(['prefix' => 'public', 
+              'middleware' => ['public.api.auth','session.readonly'],
+              'withoutMiddleware' => [\Illuminate\Session\Middleware\StartSession::class],
+            ], function () {
     /* Manage Groups */
     Route::get('/groups','GroupController@list_all_groups');
 
@@ -47,4 +49,4 @@ Route::group(['middleware' => ['public.api.auth','session.readonly'], 'prefix' =
     Route::delete('/users/{unique_id}','UserController@inactivate');
 
     //look into user deletion as it relates to workflow history - possibly only remove site membership
-})->withoutMiddleware([\Illuminate\Session\Middleware\StartSession::class]);
+});
