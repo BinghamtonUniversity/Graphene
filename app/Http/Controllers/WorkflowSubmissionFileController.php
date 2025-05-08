@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Gumlet\ImageResize;
 use Storage;
-use Zip;
+use STS\ZipStream\Facades\Zip;
 use App\WorkflowSubmissionFile;
 use App\WorkflowSubmission;
 use App\WorkflowInstance;
