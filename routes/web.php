@@ -18,11 +18,11 @@ Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
 /***** User Content *****/
 Route::get('/','UserDashboardController@index');
-Route::get('/css','UserDashboardController@css');
-Route::get('/health','UserDashboardController@health_check');
+Route::get('/css','UserDashboardController@css')->middleware('session.readonly');
+Route::get('/health','UserDashboardController@health_check')->middleware('session.readonly');
 Route::get('/app/{group}/{slug}', 'AppInstanceController@run');
-Route::get('/app/{group}','PageController@redirect');
-Route::get('/link/{link}/{extra?}','LinkController@redirect')->where('extra','(.*)');
+Route::get('/app/{group}','PageController@redirect')->middleware('session.readonly');
+Route::get('/link/{link}/{extra?}','LinkController@redirect')->where('extra','(.*)')->middleware('session.readonly');
 
 Route::get('/setup',function(){
   return redirect('/');
@@ -30,11 +30,11 @@ Route::get('/setup',function(){
 
 Route::get('/ar/{renderer}/{group}/{slug}', 'AppInstanceController@render');
 Route::get('/page/{group}/{slug}', 'PageController@run');
-Route::get('/page/{group}','PageController@redirect');
+Route::get('/page/{group}','PageController@redirect')->middleware('session.readonly');
 Route::get('/community/{group}/{slug?}', 'PageController@run'); /* Compatibility with old portal */
 Route::get('/r/{template}/{group}/{slug?}', 'PageController@render');
 Route::get('/login', 'Auth\LoginController@showLoginForm')->name('login');
-Route::get('/image/{image}','ImageController@get');
+Route::get('/image/{image}','ImageController@get')->middleware('session.readonly');
 
 Route::group(['middleware' => ['custom.auth']], function () {
   Route::get('/heartbeat','UserDashboardController@heartbeat');
@@ -65,7 +65,7 @@ Route::group(['middleware' => ['custom.auth'],'prefix' => 'admin'], function () 
   Route::get('/sites/{site}/templates', 'SiteController@templates')->middleware('can:get,site');
 });
 
-Route::group(['prefix' => 'api'], function () {
+Route::group(['prefix' => 'api','middleware' => ['session.readonly']], function () {
     Route::post('/usersetup', 'UserController@init');
 
     /***** Dashboard  *****/

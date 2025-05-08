@@ -100,7 +100,7 @@ class ValidateUser
                 'developer_workflows' => Auth::user()->developer_workflows,
                 'tags_array' => Auth::user()->tags_array,
                 'user_data_timestamp' => time()
-            ]);  
+            ]);
             Auth::user()->invalidate_cache = false;
             Auth::user()->save();
         }
