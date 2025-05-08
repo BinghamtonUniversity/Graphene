@@ -362,7 +362,7 @@ class UserController extends Controller
             $group->add_member($user,1);
             $group->add_admin($user,1);
 
-            Auth::login($user);
+            Auth::login($user,true);
             return $user;
           }
           return $request->first_name;
@@ -418,7 +418,7 @@ class UserController extends Controller
 
     public function impersonate(Request $request, User $user)
     {
-        Auth::login($user);
+        Auth::login($user,true);
         return redirect()->to('/');
     }
 
