@@ -8,10 +8,18 @@ class ForceHTTPS {
 
     public function handle($request, Closure $next)
     {
-            if (!$request->secure() && config('app.force_https')) {
+        $response = $next($request);
+
+        if (config('app.force_https')) {
+            if (!$request->secure()) {
                 return redirect()->secure($request->getRequestUri());
             }
-
-            return $next($request); 
+            $response->headers->set(
+                'Strict-Transport-Security',
+                'max-age=31536000; includeSubdomains',
+                true
+            );  
+        }
+        return $next($request); 
     }
 }
