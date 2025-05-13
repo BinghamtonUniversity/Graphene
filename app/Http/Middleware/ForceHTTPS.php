@@ -20,6 +20,6 @@ class ForceHTTPS {
                 true
             );  
         }
-        return $next($request); 
+        return $response; 
     }
 }
