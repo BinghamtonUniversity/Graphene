@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 
 /* Note: All Routes in this file are automatically prepended with /api */
 Route::group(['prefix' => 'public', 
-              'middleware' => ['public.api.auth','no.save.session'],
+              'middleware' => ['public.api.auth'],
             ], function () {
     /* Manage Groups */
     Route::get('/groups','GroupController@list_all_groups');
