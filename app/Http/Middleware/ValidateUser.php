@@ -30,7 +30,6 @@ class ValidateUser
     public function handle($request, Closure $next)
     {
         $current_site = config('app.site');
-           
  
         // If user isn't currently logged in, do nothing
         $this->customAuth = new CustomAuth();

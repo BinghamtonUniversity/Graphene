@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-use App\Libraries\NoSaveDatabaseSessionHandler;
 // use App\Libraries\MySQLStore;
 use Illuminate\Cache\DatabaseStore;
 use Illuminate\Support\ServiceProvider;
@@ -25,15 +24,7 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-     public function boot(ConnectionInterface $connection)
-     {
-        Session::extend('nosave_database', function ($app) {
-            // Resolve the database connection
-            $connection = $app->make(ConnectionInterface::class);
-            $table = config('session.table', 'sessions');
-            $minutes = config('session.lifetime', 120);
-            return new \App\Libraries\NoSaveDatabaseSessionHandler($connection, $table, $minutes);
-        });    
+     public function boot(ConnectionInterface $connection) {
     }
 
     /**
