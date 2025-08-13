@@ -175,5 +175,6 @@ return [
     */
 
     'http_only' => true,
+    'block' => false,
 
 ];
