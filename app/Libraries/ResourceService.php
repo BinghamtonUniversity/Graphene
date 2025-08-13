@@ -132,6 +132,7 @@ class ResourceService
         //      $current_user = new User;
         //      if (is_null($workflow_instance)) { abort(403); }
         //  }
+        session_write_close(); // Don't keep waiting
         if (!is_null($workflow_submission)) {
             $workflow_instance->findVersion($workflow_submission->workflow_version_id);
         } else {
@@ -242,7 +243,7 @@ class ResourceService
 
     public function get_data_int($workflow_instance, $workflow_submission, $endpoint_name, $request) {
         
-        // session_write_close(); // Don't keep waiting
+        session_write_close(); // Don't keep waiting
         if(!isset($workflow_instance->workflow->code)){
             if (!is_null($workflow_submission)) {
                 $workflow_instance->findVersion($workflow_submission->workflow_version_id);
