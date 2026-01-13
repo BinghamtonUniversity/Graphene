@@ -16,6 +16,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\UpdateUser' => [
             'App\Listeners\InvalidateUserCache',
         ],
+        \Illuminate\Mail\Events\MessageSending::class => [
+            \App\Listeners\AddSesTenantHeader::class,
+        ],
     ];
 
     /**
