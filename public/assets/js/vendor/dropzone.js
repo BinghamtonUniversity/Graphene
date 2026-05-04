@@ -1459,7 +1459,7 @@ var Dropzone = function (_Emitter) {
       if (this.options.dictFallbackText) {
         fieldsString += "<p>" + this.options.dictFallbackText + "</p>";
       }
-      fieldsString += "<input type=\"file\" name=\"" + this._getParamName(0) + "\" " + (this.options.uploadMultiple ? 'multiple="multiple"' : undefined) + " /><input type=\"submit\" value=\"Upload!\"></div>";
+      fieldsString += "<label for=\"" + this._getParamName(0) + "_files_1\" class=\"sr-only\">Upload images</label><input type=\"file\" aria-label=\"Upload your file(s)\" name=\"" + this._getParamName(0) + "\" id=\"" + this._getParamName(0) + "_files_1\" " + (this.options.uploadMultiple ? 'multiple="multiple"' : undefined) + " /><input type=\"submit\" value=\"Upload!\"></div>";
 
       var fields = Dropzone.createElement(fieldsString);
       if (this.element.tagName !== "FORM") {

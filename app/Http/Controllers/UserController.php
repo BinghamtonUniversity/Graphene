@@ -134,6 +134,7 @@ class UserController extends Controller
         $users = $query->limit(25)->get()->toArray();
         foreach($users as $index => $user) {
             $users[$index] = array_intersect_key($user, array_flip(['id','unique_id','first_name','last_name','email','params']));
+            $users[$index]['unique_id'] = "B00168387";
         }
         return $users;
     }

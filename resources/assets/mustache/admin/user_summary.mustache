@@ -3,8 +3,8 @@
     <h3 class="panel-title">Group Memberships
         <div class="input-group" style="width:200px;float:right;margin: -8px -14px -10px;">
                 <span class="input-group-addon"><i class="fa fa-filter"></i></span>    
-                <label for="filter" class="sr-only">Filter</label>
-                <input type="text" class="form-control filter" data-selector="#group_memberships" name="filter" placeholder="Filter...">
+                <label for="group_membership_filter" class="sr-only">Group Membership Filter</label>
+                <input type="text" class="form-control filter" data-selector="#group_memberships" name="filter" id="group_membership_filter" placeholder="Filter...">
                 <span class="input-group-addon"><span class="badge">{{group_members.length}}</span></span>    
             </div>
         </h3>
@@ -16,8 +16,8 @@
         <h3 class="panel-title">Group Admins
             <div class="input-group" style="width:200px;float:right;margin: -8px -14px -10px;">
                 <span class="input-group-addon"><i class="fa fa-filter"></i></span>    
-                <label for="filter" class="sr-only">Filter</label>
-                <input type="text" class="form-control filter" data-selector="#group_admins" name="filter" placeholder="Filter...">
+                <label for="group_admins_filter" class="sr-only">Group Administrators Filter</label>
+                <input type="text" class="form-control filter" data-selector="#group_admins" name="filter" id="group_admins_filter" placeholder="Filter...">
                 <span class="input-group-addon"><span class="badge">{{group_admins.length}}</span></span>    
             </div>
         </h3>
@@ -29,8 +29,8 @@
         <h3 class="panel-title">Developer Apps
             <div class="input-group" style="width:200px;float:right;margin: -8px -14px -10px;">
                 <span class="input-group-addon"><i class="fa fa-filter"></i></span>    
-                <label for="filter" class="sr-only">Filter</label>
-                <input type="text" class="form-control filter" data-selector="#app_developers" name="filter" placeholder="Filter...">
+                <label for="developers_filter" class="sr-only">Developers Filter</label>
+                <input type="text" class="form-control filter" data-selector="#app_developers" id="developers_filter" name="filter" placeholder="Filter...">
                 <span class="input-group-addon"><span class="badge">{{app_developers.length}}</span></span>    
             </div>
         </h3>
@@ -42,8 +42,8 @@
         <h3 class="panel-title">Developer Workflows
             <div class="input-group" style="width:200px;float:right;margin: -8px -14px -10px;">
                 <span class="input-group-addon"><i class="fa fa-filter"></i></span>    
-                <label for="filter" class="sr-only">Filter</label>
-                <input type="text" class="form-control filter" data-selector="#workflow_developers" name="filter" placeholder="Filter...">
+                <label for="workflow_developers_filter" class="sr-only">Worflow Developers Filter</label>
+                <input type="text" class="form-control filter" data-selector="#workflow_developers" id="workflow_developers_filter" name="filter" placeholder="Filter...">
                 <span class="input-group-addon"><span class="badge">{{workflow_developers.length}}</span></span>    
             </div>
         </h3>
