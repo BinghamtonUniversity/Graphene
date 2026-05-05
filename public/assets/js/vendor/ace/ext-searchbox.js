@@ -164,13 +164,13 @@ dom.importCssString(searchboxCss, "ace_searchbox");
 var html = '<div class="ace_search right">\
     <span action="hide" class="ace_searchbtn_close"></span>\
     <div class="ace_search_form">\
-        <input class="ace_search_field" placeholder="Search for" spellcheck="false"></input>\
+        <input class="ace_search_field" placeholder="Search for" spellcheck="false" aria-label="Search for"></input>\
         <span action="findPrev" class="ace_searchbtn prev"></span>\
         <span action="findNext" class="ace_searchbtn next"></span>\
         <span action="findAll" class="ace_searchbtn" title="Alt-Enter">All</span>\
     </div>\
     <div class="ace_replace_form">\
-        <input class="ace_search_field" placeholder="Replace with" spellcheck="false"></input>\
+        <input class="ace_search_field" placeholder="Replace with" spellcheck="false" aria-label="Replace with"></input>\
         <span action="replaceAndFindNext" class="ace_searchbtn">Replace</span>\
         <span action="replaceAll" class="ace_searchbtn">All</span>\
     </div>\
