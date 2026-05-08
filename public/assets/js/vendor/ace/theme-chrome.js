@@ -28,7 +28,7 @@ color: rgb(88, 72, 246);\
 color: rgb(88, 92, 246);\
 }\
 .ace-chrome .ace_constant.ace_library {\
-color: rgb(6, 150, 14);\
+color: #06890C\
 }\
 .ace-chrome .ace_invalid {\
 background-color: rgb(153, 0, 0);\
@@ -40,34 +40,34 @@ color: white;\
 color: rgb(60, 76, 114);\
 }\
 .ace-chrome .ace_support.ace_constant {\
-color: rgb(6, 150, 14);\
+color: #06890C\
 }\
 .ace-chrome .ace_support.ace_type,\
 .ace-chrome .ace_support.ace_class\
 .ace-chrome .ace_support.ace_other {\
-color: rgb(109, 121, 222);\
+color: #505ED7;\
 }\
 .ace-chrome .ace_variable.ace_parameter {\
 font-style:italic;\
-color:#FD971F;\
+color:#B15F02\
 }\
 .ace-chrome .ace_keyword.ace_operator {\
 color: rgb(104, 118, 135);\
 }\
 .ace-chrome .ace_comment {\
-color: #236e24;\
+color: #06890C;\
 }\
 .ace-chrome .ace_comment.ace_doc {\
-color: #236e24;\
+color: #06890C;\
 }\
 .ace-chrome .ace_comment.ace_doc.ace_tag {\
-color: #236e24;\
+color: #06890C;\
 }\
 .ace-chrome .ace_constant.ace_numeric {\
 color: rgb(0, 0, 205);\
 }\
 .ace-chrome .ace_variable {\
-color: rgb(49, 132, 149);\
+color: #2E7E8E;\
 }\
 .ace-chrome .ace_xml-pe {\
 color: rgb(104, 104, 91);\

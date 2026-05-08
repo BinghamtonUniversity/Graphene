@@ -344,7 +344,7 @@ table {
 caption {
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
-  color: rgba(var(--bs-body-color-rgb), 0.75);
+  color: rgba(var(--bs-body-color-rgb), 0.9);
   text-align: left;
 }
 

@@ -70,7 +70,7 @@ color: #6D79DE;\
 }\
 .ace-sqlserver .ace_variable.ace_parameter {\
 font-style: italic;\
-color: #FD971F;\
+color: #B15F02\
 }\
 .ace-sqlserver .ace_comment {\
 color: #008000;\

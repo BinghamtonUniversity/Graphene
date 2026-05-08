@@ -131,7 +131,7 @@ body {
   /* border-bottom: 1px solid #444; */
 }
 .nav-sidebar li > a {
-  color: #89949b;
+  color: #C8CDD0;
   border-left: solid transparent;
 }
 .nav-sidebar li a:hover,
@@ -309,7 +309,7 @@ body {
   /* background-color: #d9edf7; */
 }
 .callout-info h4 {
-  color: #5bc0de;
+  color: #20809D;
 }
 /* End Bootstrap Callouts */
 

@@ -60,7 +60,7 @@
             <span class="icon-bar"></span>
           </button>
           <a class="navbar-brand" href="/admin">
-        <img style="height:25px" src="/assets/img/graphene_all_white.png">
+        <img style="height:25px" src="/assets/img/graphene_all_white.png" alt="Graphene Logo">
           </a>
           <ul class="nav navbar-nav navbar-right hidden-xs">
           </li>
@@ -75,7 +75,7 @@
 
             <li class="dropdown">
               <a href="#" class="dropdown-toggle user-info" data-toggle="dropdown" role="button">
-                <img class="gravatar" src="https://www.gravatar.com/avatar/{{ md5(Auth::user()->email) }}?d=mm" /> 
+                <img class="gravatar" alt="User Avatar" src="https://www.gravatar.com/avatar/{{ md5(Auth::user()->email) }}?d=mm" /> 
                 {{ Auth::user()->first_name }} {{ Auth::user()->last_name }} 
                 <span class="caret"></span>
               </a>

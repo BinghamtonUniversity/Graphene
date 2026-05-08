@@ -45,7 +45,7 @@
         <li class="dropdown">
           {{#logged_in}}
           <a href="#" class="dropdown-toggle user-info" data-toggle="dropdown" role="button">
-            <img alt="{user.first_name}} {{user.last_name}}" class="gravatar" src="https://www.gravatar.com/avatar/{{user_md5_email}})?d=mm" /> 
+            <img alt="{user.first_name}} {{user.last_name}} Avatar" class="gravatar" src="https://www.gravatar.com/avatar/{{user_md5_email}})?d=mm" /> 
             {{user.first_name}} {{user.last_name}} 
             <span class="caret"></span>
           </a>
@@ -60,7 +60,7 @@
           {{/logged_in}}
           {{^logged_in}}
           <a href="#" class="dropdown-toggle user-info" data-toggle="dropdown" role="button">
-            <img class="gravatar" src="https://www.gravatar.com/avatar/?d=mm&f=y" /> Guest 
+            <img class="gravatar" alt="Guest Avatar" src="https://www.gravatar.com/avatar/?d=mm&f=y" /> Guest 
             <span class="caret"></span>
           </a>
           <ul class="dropdown-menu">
