@@ -1468,7 +1468,7 @@ gform.stencils.signature = gform.stencils.signaturePad = `
 	<div class="">
 		<div class="input-group" style="width:100%" contentEditable="false"> 
         </div>
-        <center style="color:#888"> {{{help}}}{{^help}}Sign Above{{/help}}</center>
+        <center style="color:#595959"> {{{help}}}{{^help}}Sign Above{{/help}}</center>
         <span class="font-xs text-danger" style="display:block;"></span>
 		{{>_actions}}
 	</div>
