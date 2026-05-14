@@ -1592,7 +1592,7 @@ gform.stencils.base64_file = `
       <span class="badge">{{name}}</span>
       <div style="background: #eee;text-align: center;line-height: 120px;border-radius: 20px;overflow: hidden;width: 120px;height: 120px;">{{#icon}}
       <i class="fa {{{icon}}} fa-3x" style="padding-top: 4px;"></i>
-      {{/icon}}{{^icon}}<img data-dz-thumbnail /></div>\n {{/icon}} </div></li>`),
+      {{/icon}}{{^icon}}<img data-dz-thumbnail alt="file image"/></div>\n {{/icon}} </div></li>`),
   (Dropzone.autoDiscover = false);
 gform.types.base64_file = _.extend(
   {},
