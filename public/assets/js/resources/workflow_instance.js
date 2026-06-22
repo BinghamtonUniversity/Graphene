@@ -18,7 +18,7 @@ document.body.appendChild(
 
 [data-type="switch"] > label.control-label.col-md-4 div{
   font-size: small;
-  opacity: .8;
+  opacity: .93;
   margin-top: 3px;
 }
 

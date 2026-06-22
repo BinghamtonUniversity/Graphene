@@ -67,7 +67,7 @@ Guest
 
                     <div class="form-group">
                         <div class="col-md-6 col-md-offset-4">
-                            <div class="checkbox" stlye="margin-left: 20px;">
+                            <div class="checkbox" style="margin-left: 20px;">
                                 <label>
                                     <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : ''}}> Remember Me
                                 </label>
