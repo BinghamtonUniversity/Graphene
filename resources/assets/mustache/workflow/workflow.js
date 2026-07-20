@@ -47,7 +47,7 @@ workflow_report.workflow = `
           </div>
         </div>
         {{#allowFiles}}
-        <div class="dropzone" id="uploader_{{guid}}"><center><i class="fa fa-spinner fa-spin" style="font-size:60px;margin:40px auto;color:#eee"></i></center>
+        <div class="dropzone" id="uploader_{{guid}}"><center>Drop files here to upload attachments<i class="fa fa-spinner fa-spin" style="font-size:60px;margin:40px auto;color:#eee"></i></center>
         </div>
         {{/allowFiles}}
       </div>
@@ -84,7 +84,7 @@ workflow_report.workflow = `
     </div>
   </div>
   {{#allowFiles}}
-  <div class="dropzone" id="uploader_{{guid}}"><center><i class="fa fa-spinner fa-spin" style="font-size:60px;margin:40px auto;color:#eee"></i></center></div>
+  <div class="dropzone" id="uploader_{{guid}}"><center>Drop files here to upload attachments<i class="fa fa-spinner fa-spin" style="font-size:60px;margin:40px auto;color:#eee"></i></center></div>
   {{/allowFiles}}
 </div>
 {{/container}}`;

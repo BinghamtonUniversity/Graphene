@@ -1571,7 +1571,7 @@ gform.stencils.base64_file = `
         <button type="button" class="btn btn-danger gform-clear-all" {{^value}}disabled{{/value}}><i class="fa fa-times"></i> Clear</button>
       </div></div>
       {{/multiple}}
-      <div class="dropzone dz-clickable" id="{{id}}"><div class="dz-message">Drop files here to upload</div>
+      <div class="dropzone dz-clickable" id="{{id}}"><div class="dz-message">Drop files here to upload attachments</div>
       </div>
 
       <ul class="files list-group" style="border: none;margin: 0;padding: 0;min-height:0">
@@ -2063,7 +2063,7 @@ gform.stencils.upload = `
   {{/label}}
     {{#pre}}<div class="input-group col-md-12"><span class="input-group-addon">{{{pre}}}</span>{{/pre}}
     {{^pre}}{{#post}}<div class="input-group">{{/post}}{{/pre}}
-      <div class="dropzone" id="{{id}}">
+      <div class="dropzone" id="{{id}}">Drop files here to upload attachments
       </div>
     {{#post}}<span class="input-group-addon">{{{post}}}</span></div>{{/post}}
     {{^post}}{{#pre}}</div>{{/pre}}{{/post}}
