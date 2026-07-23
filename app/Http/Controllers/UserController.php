@@ -204,6 +204,16 @@ class UserController extends Controller
             $user->save();
         }
 
+        if ($request->has('params')) {
+            $existing = (array) $user->params;
+            $incoming = (array) $request->params;
+            $merged = array_merge($existing, $incoming);
+
+            if (json_encode($existing) !== json_encode($merged)) {
+                $user->params = json_decode(json_encode($merged));
+                $user->save();
+            }
+        }
 
         $user->update($request->all());
         if ($request->has('unique_id')) {
