@@ -6,7 +6,7 @@ workflow_report.history = `<ul class="list-group workflow-history" style="margin
 <hr>
 <div><h5 style="text-align:right"><span data-toggle="tooltip" title="{{latest.updated_at.date}} @ {{latest.updated_at.time}}" data-placement="top">({{latest.updated_at.fromNow}})</span></h5></div>
 </div>
-<div class="list-group-item bg-info" style="color: white;background: #aaa;"><h4>History</h4></div>
+<div class="list-group-item bg-info" style="color: white;background: #757575;"><h4>History</h4></div>
 {{#history}}
   {{#log}}
     <div class="filterable list-group-item submission" target="_blank" data-id="{{id}}" ><div><h5>{{action}} <span class="text-muted">by {{actor.first_name}} {{actor.last_name}}</span><span class="pull-right" data-toggle="tooltip" title="{{created_at.date}} @ {{created_at.time}}" data-placement="top">({{created_at.fromNow}})</span></h5></div>
