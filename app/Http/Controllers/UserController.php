@@ -12,7 +12,6 @@ use Illuminate\Http\Request;
 use App\Libraries\NicknameLookup;
 use Illuminate\Support\Facades\DB;
 
-
 class UserController extends Controller
 {
     public function __construct()
@@ -204,6 +203,16 @@ class UserController extends Controller
             $user->save();
         }
 
+        if ($request->has('params')) {
+            $existing = (array) $user->params;
+            $incoming = (array) $request->params;
+            $merged = array_merge($existing, $incoming);
+
+            if (($existing) != ($merged)) {
+                $user->params = $merged;
+                $user->save();
+            }
+        }
 
         $user->update($request->all());
         if ($request->has('unique_id')) {
