@@ -12,7 +12,6 @@ use Illuminate\Http\Request;
 use App\Libraries\NicknameLookup;
 use Illuminate\Support\Facades\DB;
 
-
 class UserController extends Controller
 {
     public function __construct()
@@ -209,8 +208,8 @@ class UserController extends Controller
             $incoming = (array) $request->params;
             $merged = array_merge($existing, $incoming);
 
-            if (json_encode($existing) !== json_encode($merged)) {
-                $user->params = json_decode(json_encode($merged));
+            if (($existing) != ($merged)) {
+                $user->params = $merged;
                 $user->save();
             }
         }
