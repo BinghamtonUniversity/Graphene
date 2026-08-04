@@ -404,7 +404,7 @@
           .dropzone .dz-message {
             text-align: center;
             font-size: larger;
-          color: #888;
+          color: #757575;
             margin: 2em 0; }
 
 [data-type="file"] .dropzone.dz-max-files-reached{display: none;}
