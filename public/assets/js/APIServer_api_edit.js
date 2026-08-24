@@ -112,7 +112,7 @@ function load(app_version) {
     [{ name: "Constructor", content: "", disabled: true }],
     attributes.functions
   );
-  debugger;
+  // debugger;
   attributes.options = $.extend(true, { name: "options" }, attributes.options);
 
   $(".navbar-header .nav a h4").html("API - " + api.name);
@@ -322,7 +322,7 @@ function load(app_version) {
   }
   grid = new GrapheneDataGrid(options);
   grid.on("model:edited", e => {
-    debugger;
+    // debugger;
   });
   grid.on("model:required", function (e) {
     new gform({
@@ -425,7 +425,7 @@ function load(app_version) {
         {{/items}}
       </ol>`,
     };
-    debugger;
+    // debugger;
     mymodal = modal({
       title: "Sort Routes",
       content: templates.sortroutes.render({ items: tempdata }, templates),
@@ -1012,7 +1012,7 @@ $("#versions").on("click", function () {
   });
 });
 $("body").on("click", ".save-sort", () => {
-  debugger;
+  // debugger;
   // console.log(
   //   _.map($("#sorter").children(), (item, index) => {
   //     return { id: item.dataset.id, index: index };
