@@ -42,7 +42,16 @@ class APIServerController extends Controller
         if(isset($input['id']) && $input['id'] == '' ){
             unset($input['id']);
         }
-        $response = $httpHelper->http_fetch($url, $request->method(), array_merge($request->input(),['user_id'=>Auth::user()->unique_id]), $api_config->username, $api_config->password);
+        $response = $httpHelper->http_fetch([
+            "url"=>$url,
+            "verb"=>$request->method(),
+            "data"=>array_merge($request->input(),['user_id'=>Auth::user()->unique_id]),
+            "username"=>$api_config->username,
+            "password"=>$api_config->password,
+            "headers"=>['X-Unique-Id'=>Auth::user()->unique_id]
+            ]
+        );
+
         return response($response['content'],$response['code']);
     }
 
@@ -53,12 +62,26 @@ class APIServerController extends Controller
         $api_config = $mysite->get_proxyserver_by_slug($slug);
 
         $url = $api_config->server."/api/apis/".$api_id.'/versions/latest';        
-        $api_version = $httpHelper->http_fetch($url,"GET", array(), $api_config->username, $api_config->password);
+        $api_version = $httpHelper->http_fetch([
+                "url"=>$url,
+                "verb"=>"GET",
+                "username"=>$api_config->username,
+                "password"=>$api_config->password,
+                "headers"=>['X-Unique-Id'=>Auth::user()->unique_id]
+            ]
+        );
 
         $httpHelper = new HTTPHelper();
 
         $url = $api_config->server."/api/apis/".$api_id;                
-        $api = $httpHelper->http_fetch($url,"GET", array(), $api_config->username, $api_config->password);
+        $api = $httpHelper->http_fetch([
+                "url"=>$url,
+                "verb"=>"GET",
+                "username"=>$api_config->username,
+                "password"=>$api_config->password,
+                "headers"=>['X-Unique-Id'=>Auth::user()->unique_id]
+            ]
+        );
         // return $api;
         if(!is_array($api['content'])) $api['content'] = array('id'=>-1);
         return view('adminAPI', ['resource'=>'APIServer_api_edit','id'=>$api['content']['id'], 'api'=>json_encode($api['content']),'api_version'=>json_encode($api_version['content']),'slug'=>$slug,'config'=>$api_config]);
@@ -71,7 +94,14 @@ class APIServerController extends Controller
         $api_config = $mysite->get_proxyserver_by_slug($slug);
 
         $url = $api_config->server."/api/api_docs/".$api_instance_id;        
-        $docs = $httpHelper->http_fetch($url,"GET", [], $api_config->username, $api_config->password);
+        $docs = $httpHelper->http_fetch([
+                "url"=>$url,
+                "verb"=>"GET",
+                "username"=>$api_config->username,
+                "password"=>$api_config->password,
+                "headers"=>['X-Unique-Id'=>Auth::user()->unique_id]
+            ]
+        );
         if (isset($docs['content']['error'])) {
             dd($docs['content']['error']);
         }
