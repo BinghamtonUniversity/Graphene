@@ -73,18 +73,15 @@
           <ul class="nav navbar-nav navbar-right visible-xs-block">
             @can('create', 'App\App')
             <li><a href="/admin/apiserver/{{$slug}}/environments"><i class="fa fa-cloud fa-fw"></i>&nbsp; Environments</a></li>
-            <li><a href="/admin/apiserver/{{$slug}}/users"><i class="fa fa-users fa-fw"></i>&nbsp; Users</a></li>
+            <li><a href="/admin/apiserver/{{$slug}}/api_users"><i class="fa fa-users fa-fw"></i>API Users</a></li>
             <li><a href="/admin/apiserver/{{$slug}}/apis"><i class="fa fa-cubes fa-fw"></i>&nbsp; APIs</a></li>
-            <!--<li><a href="/admin/apiserver/{{$slug}}/api_versions"><i class="fa fa-code-fork fa-fw"></i>&nbsp; API Versions</a></li>-->
             <li><a href="/admin/apiserver/{{$slug}}/api_instances"><i class="fa fa-cube fa-fw"></i>&nbsp; API Instances</a></li>
             <li><a href="/admin/apiserver/{{$slug}}/resources"><i class="fa fa-database fa-fw"></i>&nbsp; Resources</a></li>
+              <li><a href="/admin/apiserver/{{$slug}}/users"><i class="fa fa-database fa-fw"></i>&nbsp; Users</a></li>
             <li><a href="/admin/apiserver/{{$slug}}/schedule"><i class="fa fa-calendar fa-fw"></i>&nbsp; Schedule</a></li>
             <li><a href="/admin/apiserver/{{$slug}}/activity_log"><i class="fa fa-file fa-fw"></i>&nbsp; Activity Log</a></li>
             @endcan  
           </ul>
-          <!--form class="navbar-form navbar-right">
-            <input type="text" class="form-control" placeholder="Search...">
-          </form-->
         </div>
       </div>
     </nav>
@@ -92,9 +89,9 @@
       <ul class="nav nav-sidebar">
         @can('create', 'App\App')
         <li><a href="/admin/apiserver/{{$slug}}/environments"><i class="fa fa-cloud fa-fw"></i>&nbsp; Environments</a></li>
-        <li><a href="/admin/apiserver/{{$slug}}/users"><i class="fa fa-users fa-fw"></i>&nbsp; Users</a></li>
+        <li><a href="/admin/apiserver/{{$slug}}/api_users"><i class="fa fa-users fa-fw"></i>&nbsp;API Users</a></li>
+          <li><a href="/admin/apiserver/{{$slug}}/users"><i class="fa fa-users fa-fw"></i>&nbsp; Users</a></li>
         <li><a href="/admin/apiserver/{{$slug}}/apis"><i class="fa fa-cubes fa-fw"></i>&nbsp; APIs</a></li>
-        <!--<li><a href="/admin/apiserver/{{$slug}}/api_versions"><i class="fa fa-code-fork fa-fw"></i>&nbsp; API Versions</a></li>-->
         <li><a href="/admin/apiserver/{{$slug}}/api_instances"><i class="fa fa-cube fa-fw"></i>&nbsp; API Instances</a></li>
         <li><a href="/admin/apiserver/{{$slug}}/resources"><i class="fa fa-database fa-fw"></i>&nbsp; Resources</a></li>
         <li><a href="/admin/apiserver/{{$slug}}/schedule"><i class="fa fa-calendar fa-fw"></i>&nbsp; Schedule</a></li>

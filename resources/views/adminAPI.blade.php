@@ -16,6 +16,7 @@
     <li role="separator" class="divider"></li>
     <li><a href="#" id="versions">Versions</a></li>
     <li><a href="#" id="instances">Instances</a></li>
+    <li><a href="/admin/apiserver/{{ $slug }}/api_developers/{!! $id !!}" id="api_developers">API Developers</a></li>
     <li role="separator" class="divider"></li>
     <li><a href="#" id="publish">Publish (new version)</a></li>
     <!-- <li><a href="#">Visit</a></li> -->

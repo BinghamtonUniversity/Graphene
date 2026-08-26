@@ -1,77 +1,58 @@
 $(".navbar-header .nav a h4").html("Users");
-url = "/api/proxy/" + slug + "/api_users";
-api = url;
+url = "/api/proxy/" + slug + "/users";
+api=url;
 $.ajax({
   url: url,
-  success: function (data) {
-    tableConfig.schema = [
-      { label: "Name", name: "app_name", required: true, value: "public" },
-      {
-        label: "Password",
-        name: "app_secret",
-        required: true,
-        value: "public",
-      },
-      {
-        label: "Environment",
-        name: "environment_id",
-        required: true,
-        type: "select",
-        options: "/api/proxy/" + slug + "/environments",
-        format: {
-          label: "{{name}}",
-          value: function (item) {
-            return item.id;
-          },
+  success: function(data){
+    grid = new GrapheneDataGrid({...tableConfig,
+      data: data,
+      name:'users',
+      schema: [
+        {name: 'id', type:'hidden'},
+        { label: "Unique ID", name: "unique_id", required: true},
+        {
+          label: "Name",
+          name: "name",
+          required: true
         },
-      },
-      {
-        label: null,
-        name: "ipshelptext",
-        type: "output",
-        format: {
-          value:
-            '<div class="alert alert-info">Use the following fields to limit requests to one or more IP Addresses, or part (substring) of an IP Address. (Leave blank to allow from any IP)</div>',
-          parse: false,
+        {
+          label: "Developer",
+          name: "developer",
+          value: true,
+          type: "checkbox",
+          template:
+              "{{#attributes.developer}}Yes{{/attributes.developer}}{{^attributes.developer}}No{{/attributes.developer}}",
+          options: [
+            { label: "No", value: 0 },
+            { label: "Yes", value: 1 },
+          ],
         },
-      },
-      { label: "IPs", name: "ips", type: "text", array: { min: 0, max: 10 } },
-      { name: "id", type: "hidden" },
-    ];
-    tableConfig.data = data;
-    tableConfig.actions = [
-      { name: "delete", max: 1 },
-      "|",
-      { name: "edit", max: 1 },
-      {
-        name: "lookup_app_secret",
-        max: 1,
-        min: 1,
-        label: '<i class="fa fa-key"></i> Lookup App Secret',
-      },
-      "|",
-      { name: "create" },
-    ];
-    tableConfig.name = "api_users";
-    grid = new GrapheneDataGrid(tableConfig);
-    grid.on("model:lookup_app_secret", function (e) {
-      url =
-        "/api/proxy/" +
-        slug +
-        "/api_users/" +
-        e.model.attributes.id +
-        "/decrypted_secret";
-      $.ajax({
-        url: url,
-        success: function (data) {
-          modal({
-            content:
-              '<pre style="text-align:center;">' +
-              atob(data.api_secret) +
-              "</pre>",
-          });
+        {
+          label: "Admin",
+          name: "admin",
+          value: true,
+          type: "checkbox",
+          template:
+              "{{#attributes.admin}}Yes{{/attributes.admin}}{{^attributes.admin}}No{{/attributes.admin}}",
+          options: [
+            { label: "No", value: 0 },
+            { label: "Yes", value: 1 },
+          ],
         },
-      });
-    });
-  },
+        {
+          label: "Active",
+          name: "active",
+          value: true,
+          type: "checkbox",
+          template:
+              "{{#attributes.active}}Yes{{/attributes.active}}{{^attributes.active}}No{{/attributes.active}}",
+          options: [
+            { label: "Inactive", value: 0 },
+            { label: "Active", value: 1 },
+          ],
+        }
+      ]
+    })
+
+  }
 });

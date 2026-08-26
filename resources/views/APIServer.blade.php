@@ -19,12 +19,6 @@
     var user = {!! Auth::user() !!};
 
     var server = "{{ $config->server }}";
-
-    // var url = '/admin/apiserver/fetch/'+route;
-    // if(resource_id !== ''){
-    //   url= '/api/groups/'+resource_id+'/'+route;
-    // }
-    // var api = '/api/'+route;
     var api = '/api/proxy/'+slug+'/'+route;
 
     var tableConfig = {
