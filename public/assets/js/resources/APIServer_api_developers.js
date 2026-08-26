@@ -18,7 +18,7 @@ $.ajax({
     tableConfig.name = "api_developers";
     grid = new GrapheneDataGrid(tableConfig);
     grid
-        .on("model:create", function (grid_event) {
+        .on("model:created", function (grid_event) {
           grid_event.preventDefault()
           $.ajax({
             url: url + "/" + grid_event.model.attributes.user_id,
