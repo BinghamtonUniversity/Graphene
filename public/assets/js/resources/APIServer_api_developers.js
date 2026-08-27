@@ -8,7 +8,7 @@ $.ajax({
     custom_config.el = '#table'
     custom_config.schema = [
       {name: 'id', type:'hidden'},
-      {label: 'Developer', name:'user_id', required: true,type:'select',options:'/api/proxy/'+slug+'/users',format:{label:"{{name}}",value:function(item){return item.id;}}},
+      {label: 'Developer', name:'user_id', required: true,type:'smallcombo',options:'/api/proxy/'+slug+'/users',format:{label:"{{name}}",value:function(item){return item.id;}}},
     ];
     custom_config.actions = [
       { name: "create" ,label:"New",type:"success"},
