@@ -10,13 +10,15 @@
     <span class="caret"></span>
     <span class="sr-only">Toggle Dropdown</span>
   </button>
-  <ul class="dropdown-menu">    
+  <ul class="dropdown-menu">
+    <li><a href="/admin/apiserver/{{ $slug }}/api_developers/{!! $id !!}" id="api_developers" target="_blank">Manage Developers</a></li>
+    <li role="separator" class="divider"></li>
     <li><a href="/api/proxy/{{ $slug }}/apis/{!! $id !!}/versions/latest" target="_blank">Export</a></li>
     <li><a href="#" id="import">Import</a></li>
     <li role="separator" class="divider"></li>
     <li><a href="#" id="versions">Versions</a></li>
     <li><a href="#" id="instances">Instances</a></li>
-    <li><a href="/admin/apiserver/{{ $slug }}/api_developers/{!! $id !!}" id="api_developers" target="_blank">API Developers</a></li>
+
     <li role="separator" class="divider"></li>
     <li><a href="#" id="publish">Publish (new version)</a></li>
     <!-- <li><a href="#">Visit</a></li> -->
