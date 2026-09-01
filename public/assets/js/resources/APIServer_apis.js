@@ -18,7 +18,9 @@ $.ajax({
 			{label: 'Name', name:'name', required:true, validate:[{type:"phpclassname"}]},
 			{label: 'Description', name:'description', required: true, type:"textarea"},
 			{label: 'Tags', name:'tags',type:'text'},
-			{label: 'Owner', name:'user_id', show:false, parse:false, type:'select',options:'/api/proxy/'+slug+'/users',format:{label:"{{name}}",value:function(item){return item.id;}}},
+			{label: 'Lead Developer', name:'user_id', required: true, type:'smallcombo',options:'/api/proxy/'+slug+'/users',
+				format:{label:"{{name}}",value:function(item){return item.id;}}
+					},
 			{name: 'id', type:'hidden'}
 		];
 		tableConfig.data = data;

@@ -18,7 +18,7 @@ $.ajax({
         {
           label: "Developer",
           name: "developer",
-          value: true,
+          value: 0,
           type: "checkbox",
           template:
               "{{#attributes.developer}}Yes{{/attributes.developer}}{{^attributes.developer}}No{{/attributes.developer}}",
@@ -30,7 +30,7 @@ $.ajax({
         {
           label: "Admin",
           name: "admin",
-          value: true,
+          value: 0,
           type: "checkbox",
           template:
               "{{#attributes.admin}}Yes{{/attributes.admin}}{{^attributes.admin}}No{{/attributes.admin}}",
@@ -42,7 +42,7 @@ $.ajax({
         {
           label: "Active",
           name: "active",
-          value: true,
+          value: 0,
           type: "checkbox",
           template:
               "{{#attributes.active}}Yes{{/attributes.active}}{{^attributes.active}}No{{/attributes.active}}",

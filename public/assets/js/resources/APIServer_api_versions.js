@@ -14,7 +14,7 @@ $.ajax({
 		];
 		tableConfig.data = data;
 		tableConfig.name = "api_versions";
-		// tableConfig.add = false;
+
 		tableConfig.actions = [
 			{'name':'edit'},'|',
 			{'name':'delete'}
