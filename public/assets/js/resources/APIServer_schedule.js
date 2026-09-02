@@ -126,25 +126,38 @@ $.ajax({
           .set(grid_event.model.attributes);
       })
       .on("model:report", function (grid_event) {
-        var data = {};
-        grid_event.model.attributes.scheduled_times = _.map(
-          grid_event.model.attributes.next_runtimes,
-          function (item) {
-            return { text: moment(item).fromNow(), value: item };
-          }
-        );
-        if (typeof grid_event.model.attributes.last_response == "object") {
-          grid_event.model.attributes.last_response = JSON.stringify(
-            grid_event.model.attributes.last_response,
-            null,
-            "\t"
-          );
+        $.ajax({
+          url: url + "/" + grid_event.model.attributes.id+"/last_response",
+          verb:"GET",
+          success: function (api_response) {
+            var data = {};
+
+            grid_event.model.attributes.scheduled_times = _.map(
+                grid_event.model.attributes.next_runtimes,
+                function (item) {
+                  return { text: moment(item).fromNow(), value: item };
+                }
+            );
+
+            if (typeof api_response.last_response !== "object") {
+              api_response.last_response = [];
+            }
+            grid_event.model.attributes.last_response = api_response.last_response
+            if (typeof grid_event.model.attributes.last_response == "object") {
+              grid_event.model.attributes.last_response = JSON.stringify(
+                  grid_event.model.attributes.last_response,
+                  null,
+                  "\t"
+              );
+            }
+
+            var templateString = gform.m(
+                "Last executed {{execution_time.scheduled}}<br>Ran for {{execution_time.minutes}} minutes and {{execution_time.seconds}} seconds<br><br>Last Results: <pre>{{last_response}}</pre><br>Scheduled to run:<pre>{{#scheduled_times}}{{text}} ({{value}})<br>{{/scheduled_times}}</pre>",
+                grid_event.model.attributes
+            );
+            modal({ title: "Report", content: templateString });
         }
-        var templateString = gform.m(
-          "Last executed {{execution_time.scheduled}}<br>Ran for {{execution_time.minutes}} minutes and {{execution_time.seconds}} seconds<br><br>Last Results: <pre>{{last_response}}</pre><br>Scheduled to run:<pre>{{#scheduled_times}}{{text}} ({{value}})<br>{{/scheduled_times}}</pre>",
-          grid_event.model.attributes
-        );
-        modal({ title: "Report", content: templateString });
+        });
       })
       .on("model:run", function (grid_event) {
         if (
