@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\URL;
 
 use Config;
 
