@@ -9,7 +9,7 @@
                     </span>
                 </h1>
             <a class="btn btn-default" style="font-size:20px;" href="/">
-                <i class="fa fa-fw fa-home"></i> Go Back to Home Page
+                <i class="fa fa-fw fa-home"></i> Click Here to Retry Login
             </a>
         </div>
         @isset($exception)
