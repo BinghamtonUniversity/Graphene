@@ -45,7 +45,7 @@ class APIServerController extends Controller
         $response = $httpHelper->http_fetch([
             "url"=>$url,
             "verb"=>$request->method(),
-            "data"=>array_merge($request->input(),['user_id'=>Auth::user()->unique_id]),
+            "data"=>array_merge($request->input()),
             "username"=>$api_config->username,
             "password"=>$api_config->password,
             "headers"=>['X-Unique-Id'=>Auth::user()->unique_id]

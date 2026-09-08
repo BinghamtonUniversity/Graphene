@@ -293,10 +293,10 @@ Route::group(['prefix' => 'api'], function () {
     // Log a visit
     Route::post('/visit/log_visit','VisitController@log_visit');
 
-    Route::get('/proxy/{slug}/{route}/{object_id?}/{action?}/{selection?}','APIServerController@fetch')->middleware('can:create,App\App');;  
-    Route::post('/proxy/{slug}/{route}/{object_id?}/{action?/{selection?}','APIServerController@fetch')->middleware('can:create,App\App');; 
-    Route::put('/proxy/{slug}/{route}/{object_id?}/{action?}/{selection?}','APIServerController@fetch')->middleware('can:create,App\App');; 
-    Route::delete('/proxy/{slug}/{route}/{object_id?}/{action?}/{selection?}','APIServerController@fetch')->middleware('can:create,App\App');; 
+    Route::get('/proxy/{slug}/{route}/{object_id?}/{action?}/{selection?}','APIServerController@fetch')->middleware('can:create,App\App');
+    Route::post('/proxy/{slug}/{route}/{object_id?}/{action?}/{selection?}','APIServerController@fetch')->middleware('can:create,App\App');
+    Route::put('/proxy/{slug}/{route}/{object_id?}/{action?}/{selection?}','APIServerController@fetch')->middleware('can:create,App\App');
+    Route::delete('/proxy/{slug}/{route}/{object_id?}/{action?}/{selection?}','APIServerController@fetch')->middleware('can:create,App\App');
   });
 
 Route::group(['middleware' => ['custom.auth'],'prefix' => 'admin/apiserver'], function () {

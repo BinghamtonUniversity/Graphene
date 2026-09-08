@@ -18,6 +18,9 @@ $.ajax({
 			{label: 'Name', name:'name', required:true, validate:[{type:"phpclassname"}]},
 			{label: 'Description', name:'description', required: true, type:"textarea"},
 			{label: 'Tags', name:'tags',type:'text'},
+			{label: 'Lead Developer', name:'user_id', required: true, type:'smallcombo',options:'/api/proxy/'+slug+'/users',
+				format:{label:"{{name}}",value:function(item){return item.id;}}
+					},
 			{name: 'id', type:'hidden'}
 		];
 		tableConfig.data = data;
