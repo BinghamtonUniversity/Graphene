@@ -8,8 +8,8 @@
                         An Authentication Error Occurred
                     </span>
                 </h1>
-            <a class="btn btn-default" style="font-size:20px;" href="/">
-                <i class="fa fa-fw fa-home"></i> Go Back to Home Page
+            <a class="btn btn-default btn-danger" style="font-size:20px;" href="/">
+                <i class="fa fa-fw fa-home"></i> Click Here to Retry Login
             </a>
         </div>
         @isset($exception)

@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\URL;
 
 use Config;
 
@@ -24,7 +24,11 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-     public function boot(ConnectionInterface $connection) {
+    public function boot(ConnectionInterface $connection) {
+        if (config('app.force_https')) {
+            URL::forceScheme('https');
+            $this->app['request']->server->set('HTTPS', 'on'); // Forces $request->secure() to return true
+        }
     }
 
     /**

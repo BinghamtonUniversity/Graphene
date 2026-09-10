@@ -62,7 +62,7 @@
     "preferred-install": "dist",
     "sort-packages": true,
     "platform": {
-      "php": "8.2"
+      "php": "8.4"
     }
   },
   "minimum-stability": "dev",

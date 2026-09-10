@@ -14,9 +14,10 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $middleware = [
+        \App\Http\Middleware\TrustProxies::class,
+        \App\Http\Middleware\ForceHTTPS::class,
         \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
         \App\Http\Middleware\Initialization::class,
-        \App\Http\Middleware\TrustProxies::class,
     ];
 
     /**
@@ -33,7 +34,6 @@ class Kernel extends HttpKernel
             // Disabling to See if Performance is Improved TJC 8/23/18
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            \App\Http\Middleware\ForceHTTPS::class,
             \App\Http\Middleware\ValidateUser::class,
         ],
         'api' => [
