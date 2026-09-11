@@ -3,7 +3,7 @@
 @section('welcome_name')
 Guest
 @endsection
-
+/* added aria-type for accessibility */
 @section('content')
 <div class="row">
     <div class="col-md-8 col-md-offset-2">

@@ -2629,6 +2629,7 @@ var USE_IE_MIME_TYPE =  useragent.isIE;
 var HAS_FOCUS_ARGS = useragent.isChrome > 63;
 
 var TextInputIOS = require("./textinput_ios").TextInput;
+//attributes added for accessibility
 var TextInput = function(parentNode, host) {
     if (useragent.isIOS)
         return TextInputIOS.call(this, parentNode, host);

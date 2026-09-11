@@ -1,5 +1,6 @@
 $(".navbar-header .nav a h4").html("Workflow Instance");
 $('[href="/admin/workflowinstances"]').parent().addClass("active");
+//opacity changed for accessibility
 document.body.appendChild(
   gform.create(`<style>
 

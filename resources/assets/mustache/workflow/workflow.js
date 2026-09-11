@@ -1,3 +1,4 @@
+/* added contectual text for accessibility */
 workflow_report.workflow = `
 <div class="btn-group pull-right slice-actions parent-hover">
 	{{#enable_min}}<span class="btn btn-default btn-sm min-item fa fa-toggle" data-event="min" title="Minimize"></span>{{/enable_min}}

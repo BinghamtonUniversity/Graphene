@@ -130,6 +130,8 @@ body {
 .nav-sidebar li {
   /* border-bottom: 1px solid #444; */
 }
+
+/*color change for accessibility*/
 .nav-sidebar li > a {
   color: #C8CDD0;
   border-left: solid transparent;
@@ -308,6 +310,7 @@ body {
   border-left-color: #5bc0de;
   /* background-color: #d9edf7; */
 }
+/*color change for accessibility*/
 .callout-info h4 {
   color: #20809D;
 }

@@ -6,6 +6,7 @@ workflow_report.history = `<ul class="list-group workflow-history" style="margin
 <hr>
 <div><h5 style="text-align:right"><span data-toggle="tooltip" title="{{latest.updated_at.date}} @ {{latest.updated_at.time}}" data-placement="top">({{latest.updated_at.fromNow}})</span></h5></div>
 </div>
+<!-- changed color for accessibility -->
 <div class="list-group-item bg-info" style="color: white;background: #757575;"><h4>History</h4></div>
 {{#history}}
   {{#log}}

@@ -2,6 +2,7 @@ define("ace/theme/sqlserver",["require","exports","module","ace/lib/dom"], funct
 
 exports.isDark = false;
 exports.cssClass = "ace-sqlserver";
+//colors changed for accessibility
 exports.cssText = ".ace-sqlserver .ace_gutter {\
 background: #ebebeb;\
 color: #333;\

@@ -44,6 +44,7 @@
             <span class="icon-bar"></span>
           </button>
           <a class="navbar-brand" style="background-color:#2d8cc3" href="/">
+            <!-- added alt text for accessibility -->
           <img style="height:25px" src="/assets/img/graphene_all_white.png" alt="Graphene Logo">
           </a>
           <ul class="nav navbar-nav navbar-right hidden-xs">
@@ -55,6 +56,7 @@
           <li><a href="/"><h4 style="margin:0;">{{ $config->name }}</h4></a>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle user-info" data-toggle="dropdown" role="button">
+                <!-- added alt text for accessibility -->
                 <img class="gravatar" alt="User Avatar" src="https://www.gravatar.com/avatar/{{ md5(Auth::user()->email) }}?d=mm" /> 
                 {{ Auth::user()->first_name }} {{ Auth::user()->last_name }} 
                 <span class="caret"></span>

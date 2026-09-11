@@ -2,6 +2,7 @@ define("ace/theme/chrome",["require","exports","module","ace/lib/dom"], function
 
 exports.isDark = false;
 exports.cssClass = "ace-chrome";
+//colors changed for accessibility
 exports.cssText = ".ace-chrome .ace_gutter {\
 background: #ebebeb;\
 color: #333;\

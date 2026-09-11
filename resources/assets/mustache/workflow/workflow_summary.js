@@ -1,5 +1,6 @@
 workflow_report.workflow_summary_container = `
 <div></div>`;
+/* fixed label for accessibility */
 workflow_report.workflow_summary = `
 {{#workflow.configuration}}
 {{#allow_multiple_new}}

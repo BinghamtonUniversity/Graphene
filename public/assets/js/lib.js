@@ -1451,7 +1451,7 @@ gform.types["endpoint"] = {
     return gform.render("combobox", this);
   },
 };
-
+//color change for accessibility
 gform.stencils.signature = gform.stencils.signaturePad = `
 <style>.signaturePad-canvas{border:solid 1px #bbb;} 
 .has-error .signaturePad-canvas{border-color:red;}</style>
@@ -1548,6 +1548,7 @@ gform.types["signature"] = gform.types["signaturePad"] = _.extend(
   }
 );
 
+//text change for accessibility
 gform.stencils.base64_file = `
 <style>
   .files .badge{position:absolute;right:10px;bottom:10px;overflow:hidden;text-overflow:ellipsis;max-width:50%}
@@ -1584,6 +1585,7 @@ gform.stencils.base64_file = `
   </div>
 </div>
 `;
+//added alt text for accessibility
 (gform.stencils.base64_file_preview = `<li class="list-group-item ">
   <div><div class="btn-group pull-right hidden-print" role="group" aria-label="...">
         <button type="button" class="btn btn-danger gform-remove" title="Remove"><i class="fa fa-times"></i></button>
@@ -2051,6 +2053,7 @@ gform.types.base64_file = _.extend(
   }
 );
 
+//added text for accessibility
 gform.stencils.upload = `
 <div class="row clearfix form-group {{modifiers}}" data-type="{{type}}">
   {{>_label}}

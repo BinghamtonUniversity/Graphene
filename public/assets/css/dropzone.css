@@ -193,6 +193,7 @@
   .dropzone .dz-message {
     text-align: center;
     margin: 2em 0; }
+    /*color change for accessibility*/
     .dropzone .dz-message .dz-button {
       background: none;
       color: #595959;
@@ -394,6 +395,7 @@
         border-left: 6px solid transparent;
         border-right: 6px solid transparent;
         border-bottom: 6px solid #be2626; }
+        /*color change for accessibility*/
         .dropzone {
           min-height: 150px;
           border: 2px dashed #ce5b1a;

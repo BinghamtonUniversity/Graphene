@@ -160,7 +160,7 @@ var keyUtil = require("../lib/keys");
 var MAX_COUNT = 999;
 
 dom.importCssString(searchboxCss, "ace_searchbox");
-
+//aria-labels added for accessibility
 var html = '<div class="ace_search right">\
     <span action="hide" class="ace_searchbtn_close"></span>\
     <div class="ace_search_form">\
