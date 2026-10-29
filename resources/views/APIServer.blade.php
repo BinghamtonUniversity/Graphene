@@ -40,6 +40,9 @@
               fields:[{name:'comment',label:'Comment',required:true}]
           })
           .on('save', e =>{
+            if (!e.form.validate()){
+              return
+            }
             model.attributes.comment = e.form.get('comment');
             $.ajax({
               url: api, 
@@ -70,6 +73,9 @@
           fields:[{name:'comment',label:'Comment',required:true}]
         })
         .on('save', e =>{
+          if (!e.form.validate()){
+            return
+          }
           model.attributes.comment = e.form.get('comment');
           $.ajax({
             url: api+'/'+model.attributes.id, 
@@ -95,7 +101,9 @@
     }],
     'model:deleted':[function(e){
       let model = e.model;
-
+      if (!e.form.validate()){
+        return
+      }
       $.ajax({
         url: api+'/'+model.attributes.id, 
         type: 'DELETE',
