@@ -101,9 +101,6 @@
     }],
     'model:deleted':[function(e){
       let model = e.model;
-      if (!e.form.validate()){
-        return
-      }
       $.ajax({
         url: api+'/'+model.attributes.id, 
         type: 'DELETE',
