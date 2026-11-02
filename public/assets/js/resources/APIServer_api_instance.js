@@ -426,6 +426,9 @@ $.ajax({
           fields: [{ name: "comment", label: "Comment", required: true }],
         })
           .on("save", function (e) {
+            if(!e.form.validate()){
+              return
+            }
             api.comment = e.form.get().comment;
             $.extend(api, gform.instances.main.get());
             if (typeof gform.instances.resources !== "undefined") {
