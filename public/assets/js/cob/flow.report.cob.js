@@ -803,6 +803,7 @@ Cobler.types.WorkflowSubmissionReport = function (container) {
                           "#uploader_" +
                             mappedData.original.workflow_submission_id,
                           {
+                            dictDefaultMessage: "Drop files here to upload attachments",
                             timeout: 60000,
                             url:
                               "/api/workflowsubmissions/" +

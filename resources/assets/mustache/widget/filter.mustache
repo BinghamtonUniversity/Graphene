@@ -1,6 +1,5 @@
 <div class="input-group">
-    <span class="input-group-addon"><i class="fa fa-filter"></i></span>   
-    <!-- renamed to preserve uniqueness for accessibility --> 
-    <label for="group_add_ons_filter" class="sr-only">Group Add Ons Filter</label>
-    <input type="text" class="form-control filter" data-selector="{{filter.selector}}" id="group_add_ons_filter" data-score="{{filter.score}}" name="filter" placeholder="{{^filter.placeholder}}Filter...{{/filter.placeholder}}{{filter.placeholder}}">
+    <span class="input-group-addon"><i class="fa fa-filter" aria-hidden="true"></i></span>
+    <!-- aria-label instead of label/id: this partial can render several times per page -->
+    <input type="text" class="form-control filter" data-selector="{{filter.selector}}" aria-label="{{^filter.placeholder}}Filter{{/filter.placeholder}}{{filter.placeholder}}" data-score="{{filter.score}}" name="filter" placeholder="{{^filter.placeholder}}Filter...{{/filter.placeholder}}{{filter.placeholder}}">
 </div>

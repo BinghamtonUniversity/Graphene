@@ -65,8 +65,7 @@ workflow_report.workflow_summary = `
     <div class="list-group-item" style="padding:0">
       <div class="input-group" style="margin: 0 -1px;">
           <span class="input-group-addon" style="border-radius: 0;"><i class="fa fa-filter"></i></span>    
-          <label for="group_filter" class="sr-only">Group Filter</label>
-          <input type="text" id="group_filter" class="form-control filter" data-selector="#submissions.list-group" name="filter" placeholder="Filter...">
+          <input type="text" aria-label="Filter submissions" class="form-control filter" data-selector="#submissions.list-group" name="filter" placeholder="Filter...">
           <span class="input-group-addon" style="border-radius: 0;"><span class="badge">{{all.length}}</span></span>    
       </div>
     </div>

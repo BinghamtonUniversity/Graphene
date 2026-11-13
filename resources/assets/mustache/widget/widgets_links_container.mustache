@@ -7,12 +7,12 @@
 	<h3 class="panel-title">{{title}}{{^title}}{{loaded.name}}{{^loaded.name}}{{{widgetType}}}{{/loaded.name}}{{/title}}</h3>
 </div>
 {{/container}}
-    <div id="{{title}}{{id}}" class="panel-collapse {{#collapse}}collapse{{/collapse}}{{^collapse}}in{{/collapse}}" role="tabpanel" aria-labelledby="{{title}}{{id}}">
+    <div id="{{title}}{{id}}" class="panel-collapse {{#collapse}}collapse{{/collapse}}{{^collapse}}in{{/collapse}}" role="tabpanel" aria-label="{{title}}{{^title}}Links{{/title}}">
       <div class="panel-body" style="padding:0">
-        <label for="link_filter" class="sr-only">Filter</label>
-        <input id="link_filter" type="text" class="form-control filter" data-selector=".link_collection" name="filter" placeholder="Filter...">
-        <!-- added id to match label for accessibility -->
-      	<div class="list-group link_collection" style="margin-bottom:0;min-height:30px" data-title="link_filter" id="link_filter">
+        <!-- unique id per widget so label/for stays valid for accessibility -->
+        <label for="link_filter_{{id}}" class="sr-only">Filter links</label>
+        <input id="link_filter_{{id}}" type="text" class="form-control filter" data-selector=".link_collection" name="filter" placeholder="Filter...">
+      	<div class="list-group link_collection" style="margin-bottom:0;min-height:30px" data-title="link_filter">
 					{{>widgets_links}}
 				</div>
       </div>

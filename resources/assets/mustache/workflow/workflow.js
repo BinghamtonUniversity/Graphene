@@ -1,4 +1,4 @@
-/* added contectual text for accessibility */
+/* added contextual text for accessibility */
 workflow_report.workflow = `
 <div class="btn-group pull-right slice-actions parent-hover">
 	{{#enable_min}}<span class="btn btn-default btn-sm min-item fa fa-toggle" data-event="min" title="Minimize"></span>{{/enable_min}}
@@ -48,7 +48,7 @@ workflow_report.workflow = `
           </div>
         </div>
         {{#allowFiles}}
-        <div class="dropzone" id="uploader_{{guid}}"><center>Drop files here to upload attachments<i class="fa fa-spinner fa-spin" style="font-size:60px;margin:40px auto;color:#eee"></i></center>
+        <div class="dropzone" id="uploader_{{guid}}"><center><i class="fa fa-spinner fa-spin" aria-hidden="true" style="font-size:60px;margin:40px auto;color:#eee"></i><span class="sr-only">Loading file uploader</span></center>
         </div>
         {{/allowFiles}}
       </div>
@@ -85,7 +85,7 @@ workflow_report.workflow = `
     </div>
   </div>
   {{#allowFiles}}
-  <div class="dropzone" id="uploader_{{guid}}"><center>Drop files here to upload attachments<i class="fa fa-spinner fa-spin" style="font-size:60px;margin:40px auto;color:#eee"></i></center></div>
+  <div class="dropzone" id="uploader_{{guid}}"><center><i class="fa fa-spinner fa-spin" aria-hidden="true" style="font-size:60px;margin:40px auto;color:#eee"></i><span class="sr-only">Loading file uploader</span></center></div>
   {{/allowFiles}}
 </div>
 {{/container}}`;

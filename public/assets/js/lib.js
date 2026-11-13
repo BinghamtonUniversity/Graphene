@@ -2066,7 +2066,7 @@ gform.stencils.upload = `
   {{/label}}
     {{#pre}}<div class="input-group col-md-12"><span class="input-group-addon">{{{pre}}}</span>{{/pre}}
     {{^pre}}{{#post}}<div class="input-group">{{/post}}{{/pre}}
-      <div class="dropzone" id="{{id}}">Drop files here to upload attachments
+      <div class="dropzone" id="{{id}}">
       </div>
     {{#post}}<span class="input-group-addon">{{{post}}}</span></div>{{/post}}
     {{^post}}{{#pre}}</div>{{/pre}}{{/post}}
@@ -2117,6 +2117,7 @@ gform.types.upload = _.extend({}, gform.types["input"], {
       {
         url: this.item.path,
         method: "post",
+        dictDefaultMessage: "Drop files here to upload attachments",
         paramName: this.name,
         success: function (message, response) {
           this.trigger("uploaded", this, { response: response });

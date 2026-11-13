@@ -55,7 +55,7 @@
               @if(Auth::check())
               <a href="#" class="dropdown-toggle user-info" data-toggle="dropdown" role="button">
                 <!-- added alt text for accessibility -->
-                <img class="gravatar" alt="User Avatar" src="https://www.gravatar.com/avatar/{{ md5(Auth::user()->email) }}?d=mm" /> 
+                <img class="gravatar" alt="" src="https://www.gravatar.com/avatar/{{ md5(Auth::user()->email) }}?d=mm" /> 
                 {{ Auth::user()->first_name }} {{ Auth::user()->last_name }} 
                 <span class="caret"></span>
               </a>
@@ -69,7 +69,7 @@
               @else
               <a href="#" class="dropdown-toggle user-info" data-toggle="dropdown" role="button">
                 <!-- added alt text for accessibility -->
-                <img class="gravatar" alt="Guest Avatar" src="https://www.gravatar.com/avatar/?d=mm&f=y" /> Guest 
+                <img class="gravatar" alt="" src="https://www.gravatar.com/avatar/?d=mm&f=y" /> Guest 
                 <span class="caret"></span>
               </a>
               <ul class="dropdown-menu">
