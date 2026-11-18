@@ -1568,7 +1568,7 @@ gform.stencils.base64_file = `
       {{#multiple}}
       <small class="count text-muted pull-left" style="display:block;text-align:left;margin:5px">0/{{max}}</small>
 
-      <div style="overflow:hidden;margin-bottom: 10px;"><div class="btn-group pull-right" role="group" aria-label="...">
+      <div style="overflow:hidden;margin-bottom: 10px;"><div class="btn-group pull-right" role="group">
         <button type="button" class="btn btn-danger gform-clear-all" {{^value}}disabled{{/value}}><i class="fa fa-times"></i> Clear</button>
       </div></div>
       {{/multiple}}
@@ -1587,7 +1587,7 @@ gform.stencils.base64_file = `
 `;
 /* added alt text for accessibility */
 (gform.stencils.base64_file_preview = `<li class="list-group-item ">
-  <div><div class="btn-group pull-right hidden-print" role="group" aria-label="...">
+  <div><div class="btn-group pull-right hidden-print" role="group">
         <button type="button" class="btn btn-danger gform-remove" title="Remove"><i class="fa fa-times"></i></button>
         <button type="button" class="btn btn-info gform-replace" title="Replace"><i class="fa fa-refresh"></i></button>
       </div></div>

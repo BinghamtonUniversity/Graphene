@@ -56,7 +56,7 @@
             </div>
             <div class="col-md-6 col-sm-8 col-xs-12">
               <div style="display:none;position: absolute;top: -5px;left: 0;right: 0;bottom: -20px;z-index:-1;background: #eaeaea;border: solid #9aa5b1;border-width: 0 1px;"></div>
-              <div class="btn-group pull-right" role="group" style="margin-bottom:20px" aria-label="...">
+              <div class="btn-group pull-right" role="group" style="margin-bottom:20px">
                     <a class="btn btn-default viewform"><i class="fa fa-eye"></i><span class="visible-lg"> View</span></a>
                     <a class="btn btn-danger edit"><i class="fa fa-pencil"></i><span class="visible-lg"> Edit</span></a>
                     <!-- <a class="btn btn-info" href="examples/">Examples</a> -->
