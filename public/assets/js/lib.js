@@ -1455,22 +1455,21 @@ gform.types["endpoint"] = {
 gform.stencils.signature = gform.stencils.signaturePad = `
 <style>.signaturePad-canvas{border:solid 1px #bbb;} 
 .has-error .signaturePad-canvas{border-color:red;}</style>
-<div class="row clearfix form-group {{modifiers}} data-type="{{type}}">
-	{{>_label}}
-	{{#label}}
-	{{^horizontal}}<div class="col-md-12">{{/horizontal}}
-	{{#horizontal}}<div class="col-md-8">{{/horizontal}}
-	{{/label}}
-	{{^label}}
-	<div class="col-md-12">
-    {{/label}}
-    <canvas class="signaturePad-canvas" width="567" height="200"></canvas>
-	<div class="">
-		<div class="input-group" style="width:100%" contentEditable="false"> 
-        </div>
-        <center style="color:#595959"> {{{help}}}{{^help}}Sign Above{{/help}}</center>
-        <span class="font-xs text-danger" style="display:block;"></span>
-		{{>_actions}}
+<div class="row clearfix form-group {{modifiers}}" data-type="{{type}}">
+	{{^hideLabel}}{{#label}}
+	<div class="{{^horizontal}}col-md-12{{/horizontal}}{{#horizontal}}col-md-4{{/horizontal}}">
+		<span id="{{id}}-label" style="display:inline-block;font-weight:bold;margin-bottom:5px;{{^horizontal}}text-align:left{{/horizontal}}" class="control-label">{{{label}}}{{#required}}{{{requiredText}}}{{/required}}</span>
+	</div>
+	{{/label}}{{/hideLabel}}
+	<div class="{{#label}}{{^horizontal}}col-md-12{{/horizontal}}{{#horizontal}}col-md-8{{/horizontal}}{{/label}}{{^label}}col-md-12{{/label}}">
+		<!-- a canvas can't take a <label for>, so it is named by the heading and help text -->
+		<canvas class="signaturePad-canvas" width="567" height="200" role="img" {{#label}}aria-labelledby="{{id}}-label {{id}}-help"{{/label}}{{^label}}aria-labelledby="{{id}}-help"{{/label}}></canvas>
+		<div class="">
+			<div class="input-group" style="width:100%" contentEditable="false"></div>
+			<center id="{{id}}-help" style="color:#595959"> {{{help}}}{{^help}}Sign Above{{/help}}</center>
+			<span class="font-xs text-danger" style="display:block;"></span>
+			{{>_actions}}
+		</div>
 	</div>
 </div>`;
 gform.types["signature"] = gform.types["signaturePad"] = _.extend(
